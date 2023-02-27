@@ -1,0 +1,38 @@
+{
+    "name": "ilbronza/notes",
+    "description": "uikit flash notifications",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Davide Bronzini",
+            "email": "davide@sistema.srl",
+            "homepage": "https://www.sistema.srl"
+        }
+    ],
+    "homepage": "https://github.com/ilbronza/notes",
+    "keywords": ["Laravel", "Notes"],
+    "require": {
+    },
+    "require-dev": {
+    },
+    "autoload": {
+        "psr-4": {
+            "IlBronza\\Notes\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "IlBronza\\Notes\\Tests\\": "tests"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "IlBronza\\Notes\\NotesServiceProvider"
+            ],
+            "aliases": {
+                "Notes": "IlBronza\\Notes\\Facades\\Notes"
+            }
+        }
+    }
+}
