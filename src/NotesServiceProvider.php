@@ -13,10 +13,10 @@ class NotesServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'ilbronza');
-        // $this->loadViewsFrom(__DIR__.'/Resources/Views', 'notes');
-        // $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
-        // $this->loadRoutesFrom(__DIR__.'/routes.php');
+        $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'notes');
+        $this->loadViewsFrom(__DIR__.'/../resources/views', 'notes');
+        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+        $this->loadRoutesFrom(__DIR__.'/../routes/notes.php');
 
         // Publishing is only necessary when using the CLI.
         if ($this->app->runningInConsole()) {
