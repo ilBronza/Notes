@@ -40,7 +40,7 @@ class Notes
     {
         $fetcher = new Fetcher([
             'title' => __('notes::notes.notesFor', [
-                'type' => __('crudModels.' . $model->getPluralCamelcaseClassBasename()),
+                'type' => __('crudModels.' . $model->getCamelcaseClassBasename()),
                 'name' => $model->getName()
             ]),
             'url' =>  static::getRoutedModel($model, 'notes.by')

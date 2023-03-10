@@ -2,5 +2,10 @@
 
 return [
 	'notesFor' => 'Note su :type - :name',
-	'anyNoteIsPresent' => 'Nessuna nota presente'
+	'addNote' => 'Aggiungi nota',
+	'manage' => 'Note',
+	'manageTypes' => 'Tipologie',
+	'index' => 'Lista note',
+	'notetype' => 'Tipologia nota',
+	'anyNoteIsPresent' => 'Nessuna nota presente',
 ];

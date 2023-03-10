@@ -16,10 +16,10 @@ class NoteParameters extends FieldsetParametersFile
 						'textarea' => 'string|required|max:10240'
 					],
 
-                    'type' => [
+                    'type_slug' => [
                         'type' => 'select',
                         'multiple' => false,
-                        'rules' => 'string|nullable|exists:' . config('notes.types.table') . ',slug',
+                        'rules' => 'string|' . config('notes.types.requiredRule') . '|exists:' . config('notes.types.table') . ',slug',
                         'relation' => 'type',
                     ],
 
@@ -38,7 +38,7 @@ class NoteParameters extends FieldsetParametersFile
                     'files' => [
                         'type' => 'file',
                         'multiple' => true,
-                        'rules' =>'string|nullable|max:2048'
+                        'rules' =>'file|nullable|max:30240'
                     ],
 	            ]
 	        ]

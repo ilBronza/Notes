@@ -35,4 +35,10 @@ class Notetype extends SluggableBaseModel
             'index'
         ]);
     }
+
+    public function getTranslatedClassname()
+    {
+        return trans('notes::notes.notetype');
+    }
+
 }

@@ -7,8 +7,13 @@ use IlBronza\CRUD\Models\BaseModel;
 use IlBronza\CRUD\Traits\Media\InteractsWithMedia;
 use IlBronza\CRUD\Traits\Model\CRUDCreatedByUserTrait;
 use IlBronza\CRUD\Traits\Model\CRUDUseUuidTrait;
+use IlBronza\Notes\Notifications\NoteNotification;
+use IlBronza\Notifications\Facades\Notification as IbNotificationFacade;
+use IlBronza\Notifications\Notification as IbNotification;
+use IlBronza\Notifications\Notifications\SlackNotification;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Support\Facades\Notification;
 use Spatie\MediaLibrary\HasMedia;
 
 class Note extends BaseModel implements HasMedia
@@ -45,9 +50,14 @@ class Note extends BaseModel implements HasMedia
         return $this->notes;
     }
 
-    public function getType()
+    public function getType() : ? Notetype
     {
         return $this->type;
+    }
+
+    public function getTypeSlug() : ? string
+    {
+        return $this->getType()?->getKey();
     }
 
     public function getImages()
@@ -85,25 +95,89 @@ class Note extends BaseModel implements HasMedia
 
     public function mustSendSlackNotification() : bool
     {
-        return $this->slack;
+        return !! $this->slack;
+    }
+
+    public function mustCreateNotification() : bool
+    {
+        return !! $this->create_notification;
+    }
+
+    public function getTypeWebhookName() : string
+    {
+        return 'notes.slack.webhooks.' . $this->getTypeSlug();
+    }
+
+    public function existsTypeWebhook() : bool
+    {
+        return !! config(
+            $this->getTypeWebhookName(),
+            false
+        );
+    }
+
+    public function getSlackWebhook() : string
+    {
+        return config(
+            $this->getTypeWebhookName(),
+            config('notes.slack.webhooks.default')
+        );
+    }
+
+    public function getMessageTypePrefix() : ? string
+    {
+        if(! ($type = $this->getType()))
+            return null;
+
+        if($this->existsTypeWebhook())
+            return null;
+
+        return $type->getName() . ":: ";
     }
 
     public function sendSlackNotification()
     {
-        
+        Notification::route(
+            'slack',
+            $this->getSlackWebhook()
+        )
+        ->notify(new SlackNotification(
+            $this->getMessageTypePrefix() . $this->getText()
+        )); 
+    }
+
+    public function createNotification()
+    {
+        IbNotification::roles('administrator')
+            ->users(
+                User::inRandomOrder()->take(5)->get()
+            )
+            ->notification(
+                new NoteNotification(
+                    $this
+                )
+            )
+            ->send();
     }
 
     public static function boot()
     {
         parent::boot();
-        // Will fire everytime an User is created
-        static::saved(function ($note) {
+
+        static::saving(function ($note)
+        {
             if($note->isDirty('slack') && $note->mustSendSlackNotification())
                 $note->sendSlackNotification();
 
             if($note->isDirty('create_notification') && $note->mustCreateNotification())
-                $note->createkNotification();
+                $note->createNotification();
         });
     }
+
+    public function getEditUrl(array $data = [])
+    {
+        return route(config('notes.routePrefix') . 'notes.edit', [$this]);
+    }
+
 
 }

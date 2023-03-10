@@ -3,9 +3,12 @@
 <table class="uk-width-1-1">
 	@foreach($notes as $note)
 	<tr>
+		<td>
+			<a href="{{ $note->getEditUrl() }}" uk-icon="file-edit"></a>
+		</td>
+		<td>{{ $note->getType()?->getName() }}</td>
 		<td><strong>{{ $note->getUserName() }} - {{ $note->getLastCompilationDate() }}: </strong></td>
 		<td>{{ $note->getText() }}</td>
-		<td>{{ $note->getType() }}</td>
 		<td>
 			<ul class="uk-list">
 			@foreach($note->getImages() as $file)

@@ -8,11 +8,26 @@ use Illuminate\Http\Request;
 
 class CrudAddNoteToModelController extends CrudNoteController
 {
+    public $returnBack = true;
+
     public $parametersFile = NoteParameters::class;
 
     public $allowedMethods = [
         'addFor',
+        'addBy'
     ];
+
+    public function addBy(Request $request, string $class, string $key)
+    {
+        $this->setReturnUrlToPrevious();
+
+        $model = $class::find($key);
+
+        $subject = $model->getNotesSubject();
+        $elements = $model->getNotesRelationships();
+
+        return view('notes::addBy', compact('subject', 'elements', 'model'));
+    }
 
     public function addFor(Request $request, string $class, string $key)
     {

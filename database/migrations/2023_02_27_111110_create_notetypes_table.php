@@ -14,8 +14,10 @@ class CreateNoteTypesTable extends Migration
     public function up()
     {
         Schema::create(config('notes.types.table'), function (Blueprint $table) {
-            $table->string('name', 16);
+            $table->string('name');
             $table->string('slug', 16)->primary();
+            $table->string('description', 255)->nullable();
+            $table->unsignedSmallInteger();
 
             $table->softDeletes();
             $table->timestamps();

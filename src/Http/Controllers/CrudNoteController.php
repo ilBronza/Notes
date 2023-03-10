@@ -20,7 +20,28 @@ class CrudNoteController extends CRUD
 {
     public $parametersFile = NoteParameters::class;
 
+    public $saveAndNew = false;
+    public $saveAndRefresh = false;
+
+
     public $returnBack = true;
+
+    public function getReturnUrl() : ? string
+    {
+        if($url = session("ilbronzanoteshttpcontrollerscrudaddnotetomodelcontroller", null))
+        {
+            session()->forget("ilbronzanoteshttpcontrollerscrudaddnotetomodelcontroller");
+
+            return $url;
+        }
+
+        return parent::getReturnUrl();
+
+        // $url = session($classKey, null);
+        // session()->forget($classKey);
+
+        // return $url;
+    }
 
     public static $tables = [
 
@@ -44,6 +65,8 @@ class CrudNoteController extends CRUD
     use CRUDPlainIndexTrait;
     use CRUDIndexTrait;
     use CRUDEditUpdateTrait;
+
+    use CRUDRelationshipTrait;
 
     use CRUDCreateStoreTrait;
 

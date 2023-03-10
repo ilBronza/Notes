@@ -28,7 +28,9 @@ class CrudNotetypeController extends CRUD
             [
                 'mySelfEdit' => 'links.edit',
                 'mySelfSee' => 'links.see',
+                'slug' => 'flat',
                 'name' => 'flat',
+                'description' => 'flat',
                 'mySelfDelete' => 'links.delete'
             ]
         ]
