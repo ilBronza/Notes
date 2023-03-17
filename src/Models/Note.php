@@ -2,7 +2,7 @@
 
 namespace IlBronza\Notes\Models;
 
-use IlBronza\AccountManager\Models\User;
+use App\Models\User;
 use IlBronza\CRUD\Models\BaseModel;
 use IlBronza\CRUD\Traits\Media\InteractsWithMedia;
 use IlBronza\CRUD\Traits\Model\CRUDCreatedByUserTrait;
@@ -58,6 +58,11 @@ class Note extends BaseModel implements HasMedia
     public function getTypeSlug() : ? string
     {
         return $this->getType()?->getKey();
+    }
+
+    public function getTypeName()
+    {
+        return $this->getType()?->getName();        
     }
 
     public function getImages()
@@ -179,5 +184,9 @@ class Note extends BaseModel implements HasMedia
         return route(config('notes.routePrefix') . 'notes.edit', [$this]);
     }
 
+    public function scopeByTypes($query, array $types)
+    {
+        return $query->whereIn('type_slug', $types);
+    }
 
 }

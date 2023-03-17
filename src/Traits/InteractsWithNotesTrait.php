@@ -20,10 +20,17 @@ trait InteractsWithNotesTrait
         );
     }
 
-    public function createNote()
+    public function getNotesByTypes(array $types)
     {
-        return $this->notes()->create();
+        return $this->notes()
+            ->byTypes($types)
+            ->get();        
     }
+
+    // public function createNote()
+    // {
+    //     return $this->notes()->create();
+    // }
 
     public function getNotesSubject() : Model
     {

@@ -8,6 +8,16 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Notetype extends SluggableBaseModel
 {
+    static function createByName(string $name) : static
+    {
+        $notetype = static::make();
+        $notetype->name = strtolower($name);
+
+        $notetype->save();
+
+        return $notetype;
+    }
+
     static function getModelRoutesPrefix() : ? string
     {
         return config('notes.routePrefix');
