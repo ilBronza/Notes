@@ -20,6 +20,8 @@ class CrudNoteController extends CRUD
 {
     public $parametersFile = NoteParameters::class;
 
+    public $avoidCreateButton = true;
+
     public $saveAndNew = false;
     public $saveAndRefresh = false;
 

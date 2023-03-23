@@ -32,6 +32,6 @@
 	</tr>
 	@endforeach
 </table>
-@else
-{{ __('notes::notes.anyNoteIsPresent') }}
+{{-- @else
+{{ __('notes::notes.anyNoteIsPresent') }} --}}
 @endif
