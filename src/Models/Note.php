@@ -25,6 +25,8 @@ class Note extends BaseModel implements HasMedia
 	 **/
 	use CRUDCreatedByUserTrait;
 
+    protected $deletingRelationships = ['media'];
+
     protected $fillable = [
         'noteable_type',
         'noteable_id',
@@ -184,9 +186,23 @@ class Note extends BaseModel implements HasMedia
         return route(config('notes.routePrefix') . 'notes.edit', [$this]);
     }
 
+    public function getDeleteUrl(array $data = [])
+    {
+        return route(config('notes.routePrefix') . 'notes.destroy', [$this]);
+    }
+
     public function scopeByTypes($query, array $types)
     {
         return $query->whereIn('type_slug', $types);
     }
 
+    public function canBeDeleted()
+    {
+        return true;
+    }
+
+    public function getDeleteButton()
+    {
+        return '<form method="POST" onSubmit="if(! confirm(\'Sei sicuro?\')){return false;}" action="' . $this->getDeleteUrl() . '">' . csrf_field() . ' ' . method_field('DELETE') . '<button class="uk-button uk-button-small" type="submit"><i class="fa-solid fa-trash"></i></button></form>';
+    }
 }

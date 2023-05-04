@@ -38,7 +38,7 @@ class Notetype extends SluggableBaseModel
         return config('notes.routePrefix') . 'notetypes';
     }
 
-    public function getIndexUrl()
+    public function getIndexUrl(array $data = [])
     {
         return implode(".", [
             $this->getRouteBasename(),

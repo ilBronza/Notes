@@ -30,6 +30,13 @@
 			@endforeach
 			</ul>
 		</td>
+		@if($note->canBeDeleted())
+		<td>
+			{!! $note->getDeleteButton() !!}
+		</td>
+		@else
+		<td></td>
+		@endif
 	</tr>
 	@endforeach
 </table>

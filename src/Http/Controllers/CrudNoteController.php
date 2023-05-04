@@ -134,6 +134,11 @@ class CrudNoteController extends CRUD
         return $this->_update($request, $note);
     }
 
+    public function getDeletedRedirectUrl()
+    {
+        return url()->previous();
+    }
+
     public function destroy(Note $note)
     {
         return $this->_destroy($note);

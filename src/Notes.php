@@ -150,6 +150,7 @@ class Notes
     {
         return implode("_", [
             class_basename($model),
+            $model->updated_at ?? '',
             $model->getKey(),
             Str::slug($key)
         ]);        
