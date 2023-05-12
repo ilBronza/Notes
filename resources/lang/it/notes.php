@@ -7,5 +7,5 @@ return [
 	'manageTypes' => 'Tipologie',
 	'index' => 'Lista note',
 	'notetype' => 'Tipologia nota',
-	'anyNoteIsPresent' => 'Nessuna nota presente',
+	'anyNoteIsPresent' => 'Nessuna nota presente'
 ];
