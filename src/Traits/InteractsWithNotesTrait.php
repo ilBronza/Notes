@@ -2,6 +2,7 @@
 
 namespace IlBronza\Notes\Traits;
 
+use IlBronza\Buttons\Button;
 use IlBronza\Notes\Facades\Notes;
 use Illuminate\Database\Eloquent\Model;
 
@@ -52,5 +53,13 @@ trait InteractsWithNotesTrait
     public function getNotesRelationshipsNames() : array
     {
         return static::$notesRelationshipsNames ?? [];
+    }
+
+    public function getAddNotesLink()
+    {
+        return Button::create([
+                'href' => Notes::getRoutedModel($this, 'notes.addBy'),
+                'icon' => 'clipboard'
+            ])->render();       
     }
 }

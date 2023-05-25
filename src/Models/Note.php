@@ -3,8 +3,11 @@
 namespace IlBronza\Notes\Models;
 
 use App\Models\User;
+use Auth;
+use Carbon\Carbon;
 use IlBronza\CRUD\Models\BaseModel;
 use IlBronza\CRUD\Traits\Media\InteractsWithMedia;
+use IlBronza\CRUD\Traits\Model\CRUDArchiverTrait;
 use IlBronza\CRUD\Traits\Model\CRUDCreatedByUserTrait;
 use IlBronza\CRUD\Traits\Model\CRUDUseUuidTrait;
 use IlBronza\Notes\Notifications\NoteNotification;
@@ -18,8 +21,10 @@ use Spatie\MediaLibrary\HasMedia;
 
 class Note extends BaseModel implements HasMedia
 {
+    use CRUDArchiverTrait;
     use InteractsWithMedia;
     use CRUDUseUuidTrait;
+
 	/**
 	 *  CRUDCreatedByUserTrait 
 	 **/
@@ -191,9 +196,24 @@ class Note extends BaseModel implements HasMedia
         return route(config('notes.routePrefix') . 'notes.destroy', [$this]);
     }
 
+    public function getArchiveUrl(array $data = [])
+    {
+        return route(config('notes.routePrefix') . 'notes.archive', [$this]);
+    }
+
+    public function getSeenUrl(array $data = [])
+    {
+        return route(config('notes.routePrefix') . 'notes.seen', [$this]);
+    }
+
     public function scopeByTypes($query, array $types)
     {
         return $query->whereIn('type_slug', $types);
+    }
+
+    public function scopeUnseen($query)
+    {
+        return $query->whereNull('seen_at');
     }
 
     public function canBeDeleted()
@@ -201,8 +221,35 @@ class Note extends BaseModel implements HasMedia
         return true;
     }
 
+    public function canBeArchived()
+    {
+        return true;
+    }
+
     public function getDeleteButton()
     {
         return '<form method="POST" onSubmit="if(! confirm(\'Sei sicuro?\')){return false;}" action="' . $this->getDeleteUrl() . '">' . csrf_field() . ' ' . method_field('DELETE') . '<button class="uk-button uk-button-small" type="submit"><i class="fa-solid fa-trash"></i></button></form>';
+    }
+
+    public function getArchiveButton()
+    {
+        return '<form method="POST" onSubmit="if(! confirm(\'Sei sicuro?\')){return false;}" action="' . $this->getArchiveUrl() . '">' . csrf_field() . ' ' . method_field('PUT') . '<button class="uk-button uk-button-small" type="submit"><i class="fa-solid fa-archive"></i></button></form>';
+    }
+
+
+    public function seen()
+    {
+        $this->seen_at = Carbon::now();
+
+        if(array_key_exists('seen_by', $this->attributes))
+            $this->seen_by = Auth::id();
+
+        $this->save();
+
+        $updateParameters = [];
+        $updateParameters['success'] = true;
+        $updateParameters['action'] = 'removeRow';
+
+        return $updateParameters;
     }
 }

@@ -3,6 +3,7 @@
 namespace IlBronza\Notes\Http\Controllers;
 
 use IlBronza\CRUD\CRUD;
+use IlBronza\CRUD\Traits\CRUDArchiveTrait;
 use IlBronza\CRUD\Traits\CRUDCreateStoreTrait;
 use IlBronza\CRUD\Traits\CRUDDeleteTrait;
 use IlBronza\CRUD\Traits\CRUDDestroyTrait;
@@ -24,7 +25,6 @@ class CrudNoteController extends CRUD
 
     public $saveAndNew = false;
     public $saveAndRefresh = false;
-
 
     public $returnBack = true;
 
@@ -50,14 +50,84 @@ class CrudNoteController extends CRUD
         'index' => [
             'fields' => 
             [
+                'imported' => 'boolean',
+                'created_at' => [
+                    'type' => 'dates.datetime',
+                    'order' => [
+                        'priority' => 10,
+                        'type' => 'DESC'
+                    ]
+                ],
                 'mySelfEdit' => 'links.edit',
                 'mySelfSee' => 'links.see',
-                'notes' => 'flat',
-                'type' => 'flat',
-                'user_id' => 'flat',
+                'user_id' => 'users.name',
+                'noteable_type' => 'flat',
+                'notes' => [
+                    'type' => 'flat',
+                    'width' => '650px'
+                ],
+                'slack' => 'boolean',
+                'create_notification' => 'boolean',
+                'type_slug' => 'flat',
+                'mySelfArchive' => 'links.archive',
+                'mySelfDelete' => 'links.delete'
+            ]
+        ],
+
+        'related' => [
+            'fields' => 
+            [
+                'imported' => 'boolean',
+                'created_at' => [
+                    'type' => 'dates.datetime',
+                    'order' => [
+                        'priority' => 10,
+                        'type' => 'DESC'
+                    ]
+                ],
+                'mySelfEdit' => 'links.edit',
+                'mySelfSee' => 'links.see',
+                'user_id' => 'users.name',
+                'noteable_type' => 'flat',
+                'notes' => [
+                    'type' => 'flat',
+                    'width' => '650px'
+                ],
+                'slack' => 'boolean',
+                'create_notification' => 'boolean',
+                'type_slug' => 'flat',
+                'mySelfArchive' => 'links.archive',
+                'mySelfDelete' => 'links.delete'
+            ]
+        ],
+
+        'archived' => [
+            'fields' => 
+            [
+                'imported' => 'boolean',
+                'created_at' => [
+                    'type' => 'dates.datetime',
+                    'order' => [
+                        'priority' => 10,
+                        'type' => 'DESC'
+                    ]
+                ],
+                'archived_at' => 'dates.datetime',
+                'mySelfEdit' => 'links.edit',
+                'mySelfSee' => 'links.see',
+                'user_id' => 'users.name',
+                'noteable_type' => 'flat',
+                'notes' => [
+                    'type' => 'flat',
+                    'width' => '650px'
+                ],
+                'slack' => 'boolean',
+                'create_notification' => 'boolean',
+                'type_slug' => 'flat',
                 'mySelfDelete' => 'links.delete'
             ]
         ]
+
     ];
 
     use CRUDDeleteTrait;
@@ -71,6 +141,8 @@ class CrudNoteController extends CRUD
     use CRUDRelationshipTrait;
 
     use CRUDCreateStoreTrait;
+
+    use CRUDArchiveTrait;
 
     use CRUDDeleteTrait;
     use CRUDDestroyTrait;
@@ -105,6 +177,8 @@ class CrudNoteController extends CRUD
         'create',
         'store',
         'destroy',
+        'archive',
+        'archived'
     ];
 
     public function getIndexElements()
@@ -132,6 +206,16 @@ class CrudNoteController extends CRUD
     public function update(Request $request, Note $note)
     {
         return $this->_update($request, $note);
+    }
+
+    public function archive(Request $request, Note $note)
+    {
+        $data = $this->_archive($request, $note);
+
+        if($request->ajax())
+            return $data;
+
+        return back();
     }
 
     public function getDeletedRedirectUrl()

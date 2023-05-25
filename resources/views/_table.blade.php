@@ -3,7 +3,7 @@
 <table class="uk-width-1-1">
 	@foreach($notes as $note)
 	<tr>
-		<td>
+		<td style="width: 47px;">
 			<a href="{{ $note->getEditUrl() }}" uk-icon="file-edit"></a>
 		</td>
 		<td>{{ $note->getType()?->getName() }}</td>
@@ -30,13 +30,16 @@
 			@endforeach
 			</ul>
 		</td>
-		@if($note->canBeDeleted())
-		<td>
-			{!! $note->getDeleteButton() !!}
-		</td>
-		@else
-		<td></td>
+		<td style="width: 47px;">
+		@if($note->canBeArchived())
+			{!! $note->getArchiveButton() !!}
 		@endif
+		</td>
+		<td style="width: 47px;">
+		@if($note->canBeDeleted())
+			{!! $note->getDeleteButton() !!}
+		@endif
+		</td>
 	</tr>
 	@endforeach
 </table>

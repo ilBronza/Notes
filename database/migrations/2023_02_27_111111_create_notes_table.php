@@ -29,6 +29,11 @@ class CreateNotesTable extends Migration
             $table->boolean('slack')->nullable();
             $table->boolean('create_notification')->nullable();
 
+            $table->timestamp('archived_at')->nullable();
+
+            $table->unsignedBigInteger('archived_by')->nullable();
+            $table->foreign('archived_by')->references('id')->on('users');
+
             $table->softDeletes();
             $table->timestamps();
         });

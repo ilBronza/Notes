@@ -6,6 +6,8 @@ return [
 	'manage' => 'Note',
 	'manageTypes' => 'Tipologie',
 	'index' => 'Lista note',
+	'archived' => 'Note archiviate',
+	'unseen' => 'Note non viste',
 	'notetype' => 'Tipologia nota',
 	'anyNoteIsPresent' => 'Nessuna nota presente'
 ];

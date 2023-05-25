@@ -26,10 +26,12 @@ class NoteParameters extends FieldsetParametersFile
                     'slack' => [
                         'type' => 'boolean',
                         'rules' => 'boolean|required',
+                        'visible' => false,
                         'default' => config('notes.channels.slack')
                     ],
 
                     'create_notification' => [
+                        'visible' => false,
                         'type' => 'boolean',
                         'rules' => 'boolean|required',
                         'default' => config('notes.channels.notification')

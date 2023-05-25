@@ -3,6 +3,7 @@
 use IlBronza\Notes\Http\Controllers\CrudNoteByModelController;
 use IlBronza\Notes\Http\Controllers\CrudNoteController;
 use IlBronza\Notes\Http\Controllers\CrudNotetypeController;
+use IlBronza\Notes\Http\Controllers\CrudUnseenNoteController;
 
 Route::group([
 	'middleware' => ['web', 'auth'],
@@ -13,6 +14,10 @@ Route::group([
 	{
 		Route::resource('notetypes', CrudNotetypeController::class);
 		Route::resource('notes', CrudNoteController::class);
+
+		Route::get('unseen-notes', [CrudUnseenNoteController::class, 'index'])->name('notes.unseen');
+
+		Route::post('notes/{note}/seen', [CrudUnseenNoteController::class, 'seen'])->name('notes.seen');
 
 		Route::get('delete-media/{note}/{media}', [CrudNoteController::class, 'delete'])->name('notes.deleteMedia');
 
