@@ -55,11 +55,22 @@ trait InteractsWithNotesTrait
         return static::$notesRelationshipsNames ?? [];
     }
 
-    public function getAddNotesLink()
+    public function getAddNotesUrl() : string
+    {
+        return Notes::getRoutedModel($this, 'notes.addBy');
+    }
+
+    public function getAddNotesButton() : Button
     {
         return Button::create([
-                'href' => Notes::getRoutedModel($this, 'notes.addBy'),
+                'href' => $this->getAddNotesUrl(),
                 'icon' => 'clipboard'
-            ])->render();       
+            ]);
+    }
+
+    public function getAddNotesLink() : string
+    {
+        return $this->getAddNotesButton()
+                    ->render();
     }
 }

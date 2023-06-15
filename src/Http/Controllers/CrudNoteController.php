@@ -2,6 +2,7 @@
 
 namespace IlBronza\Notes\Http\Controllers;
 
+use IlBronza\Buttons\Button;
 use IlBronza\CRUD\CRUD;
 use IlBronza\CRUD\Traits\CRUDArchiveTrait;
 use IlBronza\CRUD\Traits\CRUDCreateStoreTrait;
@@ -19,6 +20,7 @@ use Illuminate\Http\Request;
 
 class CrudNoteController extends CRUD
 {
+    public $rowSelectCheckboxes = true;
     public $parametersFile = NoteParameters::class;
 
     public $avoidCreateButton = true;
@@ -127,7 +129,6 @@ class CrudNoteController extends CRUD
                 'mySelfDelete' => 'links.delete'
             ]
         ]
-
     ];
 
     use CRUDDeleteTrait;
@@ -143,9 +144,6 @@ class CrudNoteController extends CRUD
     use CRUDCreateStoreTrait;
 
     use CRUDArchiveTrait;
-
-    use CRUDDeleteTrait;
-    use CRUDDestroyTrait;
 
     public function getRouteBaseNamePieces()
     {
@@ -166,6 +164,24 @@ class CrudNoteController extends CRUD
         return $this->modelClass;
     }
 
+    public function addArchiveBulkButton()
+    {
+        $button = Button::create([
+            'href' => Note::getArchiveBulkUrl(),
+            'text' => 'notes.archive',
+            'icon' => 'archive'
+        ]);
+
+        $button->setAjaxTableButton();
+
+        $this->table->addButton($button);        
+    }
+
+    public function addIndexButtons()
+    {
+        $this->addArchiveBulkButton();
+    }
+
     /**
      * http methods allowed. remove non existing methods to get a 403
      **/
@@ -178,6 +194,7 @@ class CrudNoteController extends CRUD
         'store',
         'destroy',
         'archive',
+        'archiveBulk',
         'archived'
     ];
 
@@ -206,6 +223,25 @@ class CrudNoteController extends CRUD
     public function update(Request $request, Note $note)
     {
         return $this->_update($request, $note);
+    }
+
+    public function archiveBulk(Request $request)
+    {
+        $request->validate([
+            'ids' => 'array|required',
+            'ids.*' => 'string|exists:ibnotes,id'
+        ]);
+
+        $notes = Note::whereIn('id', $request->ids)->get();
+
+        foreach($notes as $note)
+            $note->archive();
+
+        $updateParameters = [];
+        $updateParameters['success'] = true;
+        $updateParameters['action'] = 'reloadTable';
+
+        return $updateParameters;
     }
 
     public function archive(Request $request, Note $note)

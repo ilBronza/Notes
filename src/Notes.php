@@ -91,11 +91,11 @@ class Notes
         return $notes->flatten();
     }
 
-    static function getNotesNumberWithRelated(Model $model, array $related = []) : int
+    static function getNotesNumberWithRelated(Model $model, callable $getRelated) : int
     {
         $result = $model->notes()->count();
 
-        foreach($related as $elements)
+        foreach($getRelated() as $elements)
             if(class_basename($elements) == 'Collection')
                 foreach($elements as $element)
                     $result += $element->notes()->count();
@@ -106,14 +106,17 @@ class Notes
         return $result;
     }
 
-    static function getCachedNotesNumberWithRelated(Model $model, array $related = []) : int
+    static function getCachedNotesNumberWithRelated(Model $model, callable $getRelated) : int
     {
         return cache()->remember(
             $model->cacheKey('notesCount'),
-            1200,
-            function() use($model, $related)
+            360000,
+            function() use($model, $getRelated)
             {
-                return static::getNotesNumberWithRelated($model, $related);
+                return static::getNotesNumberWithRelated(
+                    $model,
+                    $getRelated
+                );
             }
         );
     }

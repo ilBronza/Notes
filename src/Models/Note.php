@@ -186,6 +186,21 @@ class Note extends BaseModel implements HasMedia
         });
     }
 
+    static function getSeeBulkUrl()
+    {
+        return route(config('notes.routePrefix') . 'notes.seeBulk');
+    }
+
+    static function getArchiveBulkUrl()
+    {
+        return route(config('notes.routePrefix') . 'notes.archiveBulk');
+    }
+
+    public function getShowUrl(array $data = [])
+    {
+        return route(config('notes.routePrefix') . 'notes.show', [$this]);
+    }
+
     public function getEditUrl(array $data = [])
     {
         return route(config('notes.routePrefix') . 'notes.edit', [$this]);
@@ -245,11 +260,5 @@ class Note extends BaseModel implements HasMedia
             $this->seen_by = Auth::id();
 
         $this->save();
-
-        $updateParameters = [];
-        $updateParameters['success'] = true;
-        $updateParameters['action'] = 'removeRow';
-
-        return $updateParameters;
     }
 }

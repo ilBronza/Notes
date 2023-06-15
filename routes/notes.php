@@ -15,7 +15,11 @@ Route::group([
 		Route::resource('notetypes', CrudNotetypeController::class);
 		Route::resource('notes', CrudNoteController::class);
 
+		Route::post('archive-bulk', [CrudNoteController::class, 'archiveBulk'])->name('notes.archiveBulk');
+
 		Route::get('unseen-notes', [CrudUnseenNoteController::class, 'index'])->name('notes.unseen');
+
+		Route::post('see-bulk', [CrudUnseenNoteController::class, 'seeBulk'])->name('notes.seeBulk');
 
 		Route::post('notes/{note}/seen', [CrudUnseenNoteController::class, 'seen'])->name('notes.seen');
 

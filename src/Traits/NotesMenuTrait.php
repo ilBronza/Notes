@@ -28,15 +28,6 @@ trait NotesMenuTrait
 
         $notesButton->addChild(
             $menu->createButton([
-                'name' => 'notes.manageTypes',
-                'icon' => 'user-gear',
-                'href' => static::route('notetypes.index'),
-                'text' => 'notes::notes.manageTypes'
-            ])
-        );
-
-        $notesButton->addChild(
-            $menu->createButton([
                 'name' => 'notes.unseen',
                 'icon' => 'eye',
                 'href' => static::route('notes.unseen'),
@@ -61,5 +52,15 @@ trait NotesMenuTrait
                 'text' => 'notes::notes.archived'
             ])
         );
+
+        $notesButton->addChild(
+            $menu->createButton([
+                'name' => 'notes.manageTypes',
+                'icon' => 'user-gear',
+                'href' => static::route('notetypes.index'),
+                'text' => 'notes::notes.manageTypes'
+            ])
+        );
+
     }
 }

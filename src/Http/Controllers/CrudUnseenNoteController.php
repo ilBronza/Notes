@@ -2,7 +2,9 @@
 
 namespace IlBronza\Notes\Http\Controllers;
 
+use IlBronza\Buttons\Button;
 use IlBronza\Notes\Http\Controllers\CrudNoteController;
+use IlBronza\Notes\Models\Note;
 use Illuminate\Http\Request;
 
 class CrudUnseenNoteController extends CrudNoteController
@@ -12,6 +14,7 @@ class CrudUnseenNoteController extends CrudNoteController
         'index' => [
             'fields' => 
             [
+                'mySelfPrimary' => 'primary',
                 'imported' => 'boolean',
                 'created_at' => [
                     'type' => 'dates.datetime',
@@ -43,8 +46,28 @@ class CrudUnseenNoteController extends CrudNoteController
      **/
     public $allowedMethods = [
         'index',
-        'seen'
+        'seen',
+        'seeBulk'
     ];
+
+    public function addDSeeBulkButton()
+    {
+        $button = Button::create([
+            'href' => Note::getSeeBulkUrl(),
+            'text' => 'notes.see',
+            'icon' => 'eye'
+        ]);
+
+        $button->setAjaxTableButton();
+
+        $this->table->addButton($button);        
+    }
+
+    public function addIndexButtons()
+    {
+        $this->addDSeeBulkButton();
+        $this->addArchiveBulkButton();
+    }
 
     public function getIndexElements()
     {
@@ -55,12 +78,35 @@ class CrudUnseenNoteController extends CrudNoteController
     {
         $note = $this->getModelClass()::withoutGlobalScope(ArchivingScope::class)->find($note);
 
-        $data = $note->seen();
+        $note->seen();
 
         if($request->ajax())
-            return $data;
+            return [
+                'success' => true,
+                'action' => 'removeRow'
+            ];
 
         return back();
     }
+
+    public function seeBulk(Request $request)
+    {
+        $request->validate([
+            'ids' => 'array|required',
+            'ids.*' => 'string|exists:ibnotes,id'
+        ]);
+
+        $notes = Note::whereIn('id', $request->ids)->get();
+
+        foreach($notes as $note)
+            $note->seen();
+
+        $updateParameters = [];
+        $updateParameters['success'] = true;
+        $updateParameters['action'] = 'reloadTable';
+
+        return $updateParameters;
+    }
+
 }
 
