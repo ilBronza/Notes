@@ -63,7 +63,9 @@ class CrudNoteController extends CRUD
                 'mySelfEdit' => 'links.edit',
                 'mySelfSee' => 'links.see',
                 'user_id' => 'users.name',
-                'noteable_type' => 'flat',
+                'noteable_type' => 'utilities.removeNamespace',
+                'mySelfSeeElement.noteable' => 'links.see',
+                'mySelfName.noteable' => '_fn_getName',
                 'notes' => [
                     'type' => 'flat',
                     'width' => '650px'
@@ -90,7 +92,9 @@ class CrudNoteController extends CRUD
                 'mySelfEdit' => 'links.edit',
                 'mySelfSee' => 'links.see',
                 'user_id' => 'users.name',
-                'noteable_type' => 'flat',
+                'noteable_type' => 'utilities.removeNamespace',
+                'mySelfSeeElement.noteable' => 'links.see',
+                'mySelfName.noteable' => '_fn_getName',
                 'notes' => [
                     'type' => 'flat',
                     'width' => '650px'
@@ -118,7 +122,9 @@ class CrudNoteController extends CRUD
                 'mySelfEdit' => 'links.edit',
                 'mySelfSee' => 'links.see',
                 'user_id' => 'users.name',
-                'noteable_type' => 'flat',
+                'noteable_type' => 'utilities.removeNamespace',
+                'mySelfSeeElement.noteable' => 'links.see',
+                'mySelfName.noteable' => '_fn_getName',
                 'notes' => [
                     'type' => 'flat',
                     'width' => '650px'
@@ -200,7 +206,7 @@ class CrudNoteController extends CRUD
 
     public function getIndexElements()
     {
-        return $this->getModelClass()::all();
+        return $this->getModelClass()::with('noteable')->get();
     }
 
     /**

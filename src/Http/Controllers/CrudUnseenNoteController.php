@@ -26,7 +26,9 @@ class CrudUnseenNoteController extends CrudNoteController
                 'mySelfEdit' => 'links.edit',
                 'mySelfSee' => 'links.see',
                 'user_id' => 'users.name',
-                'noteable_type' => 'flat',
+                'noteable_type' => 'utilities.removeNamespace',
+                'mySelfSeeElement.noteable' => 'links.see',
+                'mySelfName.noteable' => '_fn_getName',
                 'notes' => [
                     'type' => 'flat',
                     'width' => '650px'
@@ -71,7 +73,7 @@ class CrudUnseenNoteController extends CrudNoteController
 
     public function getIndexElements()
     {
-        return $this->getModelClass()::unseen()->get();
+        return $this->getModelClass()::with('noteable')->unseen()->get();
     }
 
     public function seen(Request $request, $note)
