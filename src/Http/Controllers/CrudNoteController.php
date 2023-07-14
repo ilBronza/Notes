@@ -214,20 +214,23 @@ class CrudNoteController extends CRUD
      *
      * these methods are compulsorily needed to execute CRUD base functions
      **/
-    public function show(Note $note)
+    public function show($note)
     {
+        $note = $this->findModel($note);
         //$this->addExtraView('top', 'folder.subFolder.viewName', ['some' => $thing]);
 
         return $this->_show($note);
     }
 
-    public function edit(Note $note)
+    public function edit($note)
     {
+        $note = $this->findModel($note);
         return $this->_edit($note);
     }
 
-    public function update(Request $request, Note $note)
+    public function update(Request $request, $note)
     {
+        $note = $this->findModel($note);
         return $this->_update($request, $note);
     }
 
@@ -250,8 +253,9 @@ class CrudNoteController extends CRUD
         return $updateParameters;
     }
 
-    public function archive(Request $request, Note $note)
+    public function archive(Request $request, $note)
     {
+        $note = $this->findModel($note);
         $data = $this->_archive($request, $note);
 
         if($request->ajax())
@@ -265,8 +269,9 @@ class CrudNoteController extends CRUD
         return url()->previous();
     }
 
-    public function destroy(Note $note)
+    public function destroy($note)
     {
+        $note = $this->findModel($note);
         return $this->_destroy($note);
     }
 
