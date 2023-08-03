@@ -5,6 +5,7 @@ namespace IlBronza\Notes\Traits;
 use IlBronza\Buttons\Button;
 use IlBronza\Notes\Facades\Notes;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 
 trait InteractsWithNotesTrait
 {
@@ -26,6 +27,14 @@ trait InteractsWithNotesTrait
         return $this->notes()
             ->byTypes($types)
             ->get();        
+    }
+
+    public function getNotes() : Collection
+    {
+        if($this->relationLoaded('notes'))
+            return $this->notes;
+
+        return $this->notes()->get();
     }
 
     // public function createNote()
