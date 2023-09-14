@@ -17,7 +17,6 @@ class CreateNoteTypesTable extends Migration
             $table->string('name');
             $table->string('slug', 16)->primary();
             $table->string('description', 255)->nullable();
-            $table->unsignedSmallInteger();
 
             $table->softDeletes();
             $table->timestamps();

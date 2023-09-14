@@ -66,6 +66,7 @@ class CrudNoteController extends CRUD
                 'noteable_type' => 'utilities.removeNamespace',
                 'mySelfSeeElement.noteable' => 'links.see',
                 'mySelfName.noteable' => '_fn_getName',
+                'mySelfClient.noteable.client.name' => 'flat',
                 'notes' => [
                     'type' => 'flat',
                     'width' => '650px'
@@ -95,6 +96,7 @@ class CrudNoteController extends CRUD
                 'noteable_type' => 'utilities.removeNamespace',
                 'mySelfSeeElement.noteable' => 'links.see',
                 'mySelfName.noteable' => '_fn_getName',
+                'mySelfClient.noteable.client.name' => 'flat',
                 'notes' => [
                     'type' => 'flat',
                     'width' => '650px'
@@ -125,6 +127,7 @@ class CrudNoteController extends CRUD
                 'noteable_type' => 'utilities.removeNamespace',
                 'mySelfSeeElement.noteable' => 'links.see',
                 'mySelfName.noteable' => '_fn_getName',
+                'mySelfClient.noteable.client.name' => 'flat',
                 'notes' => [
                     'type' => 'flat',
                     'width' => '650px'
