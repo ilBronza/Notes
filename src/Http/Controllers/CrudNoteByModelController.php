@@ -21,7 +21,7 @@ class CrudNoteByModelController extends CrudNoteController
             'noteable_id' => $key
         ])->with('media')->get();
 
-        return view('notes::_table', compact('notes'))->render();
+        return view('notes::_table', compact('notes', 'key'))->render();
     }
 }
 

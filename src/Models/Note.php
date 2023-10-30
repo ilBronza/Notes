@@ -11,6 +11,7 @@ use IlBronza\CRUD\Traits\Model\CRUDArchiverTrait;
 use IlBronza\CRUD\Traits\Model\CRUDCreatedByUserTrait;
 use IlBronza\CRUD\Traits\Model\CRUDUseUuidTrait;
 use IlBronza\Notes\Notifications\NoteNotification;
+use IlBronza\Notes\Traits\Models\NoteSettersGettersTrait;
 use IlBronza\Notifications\Facades\Notification as IbNotificationFacade;
 use IlBronza\Notifications\Notification as IbNotification;
 use IlBronza\Notifications\Notifications\SlackNotification;
@@ -29,6 +30,9 @@ class Note extends BaseModel implements HasMedia
 	 *  CRUDCreatedByUserTrait 
 	 **/
 	use CRUDCreatedByUserTrait;
+
+
+    use NoteSettersGettersTrait;
 
     protected $deletingRelationships = ['media'];
 
@@ -260,5 +264,10 @@ class Note extends BaseModel implements HasMedia
             $this->seen_by = Auth::id();
 
         $this->save();
+    }
+
+    public function getWholeString()
+    {
+        return "{$this->getType()?->getName()} - {$this->getUserName()}: {$this->getLastCompilationDate()} -> {$this->getText()}";
     }
 }

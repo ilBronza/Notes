@@ -1,6 +1,34 @@
+<script type="text/javascript">
+	$("table.{{ $key }} form").submit(function (event)
+	{
+		var that = this;
+		event.preventDefault();
+		var url = $(this).attr('action');
+
+		var formData = {
+			_method : 'DELETE'
+		};
+
+		$.ajax({
+			type: "POST",
+			url: url,
+			data: formData,
+			dataType: "json",
+		}).done(function (response)
+		{
+			if(response.success == true)
+			{
+				window.addSuccessNotification(response.message)
+
+				$(that).parents('.ibfetchercontainer').find('.refresh').click();
+			}
+		});
+
+	});
+</script>
 
 @if(count($notes))
-<table class="uk-width-1-1">
+<table class="uk-width-1-1 {{ $key }}">
 	@foreach($notes as $note)
 	<tr>
 		<td style="width: 47px;">
