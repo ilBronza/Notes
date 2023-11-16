@@ -63,14 +63,15 @@ class CrudNoteController extends CRUD
                 'mySelfEdit' => 'links.edit',
                 'mySelfSee' => 'links.see',
                 'user_id' => 'users.name',
-                'noteable_type' => 'utilities.removeNamespace',
                 'mySelfSeeElement.noteable' => 'links.see',
+                'noteable_type' => 'utilities.removeNamespace',
                 'mySelfName.noteable' => '_fn_getName',
                 'mySelfClient.noteable.client.name' => 'flat',
                 'notes' => [
                     'type' => 'flat',
                     'width' => '650px'
                 ],
+                'media' => 'flat',
                 'slack' => 'boolean',
                 'create_notification' => 'boolean',
                 'type_slug' => 'flat',

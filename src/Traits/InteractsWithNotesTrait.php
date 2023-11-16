@@ -54,7 +54,15 @@ trait InteractsWithNotesTrait
         $result = [];
 
         foreach($names as $name)
-            $result[$name] = $this->$name;
+        {
+            $methodName = 'get' . ucfirst($name);
+
+            if(method_exists($this, $methodName))
+                $result[$name] = $this->{$methodName}();
+
+            else
+                $result[$name] = $this->$name;
+        }
 
         return $result;
     }

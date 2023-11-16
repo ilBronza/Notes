@@ -1,6 +1,6 @@
 
 @if(count($notes))
-<table class="uk-width-xxlarge@l uk-width-xlarge@m">
+<table class="uk-width-1-1">
 	@foreach($notes as $note)
 	<tr>
 		<td>{{ $note->noteable?->getTranslatedClassname() }}</td>
@@ -29,6 +29,24 @@
 			@endforeach
 			</ul>
 		</td>
+		@if(\Auth::user()?->hasRole('administrator'))
+		<td>
+			<a
+				data-type="POST"
+				class="ib-cell-ajax-button"
+				href="{{ $note->getArchiveUrl() }}">
+				<i class="fa fa-archive" aria-hidden="true"></i>
+			</a>
+		</td>
+		<td>
+			<a
+				data-type="PUT"
+				class="ib-cell-ajax-button"
+				href="{{ $note->getSeenUrl() }}">
+				<i class="fa fa-eye" aria-hidden="true"></i>
+			</a>
+		</td>
+		@endif
 	</tr>
 	@endforeach
 </table>

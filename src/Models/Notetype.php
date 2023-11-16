@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Notetype extends SluggableBaseModel
 {
+    static $deletingRelationships = [];
+
     static function createByName(string $name) : static
     {
         $notetype = static::make();

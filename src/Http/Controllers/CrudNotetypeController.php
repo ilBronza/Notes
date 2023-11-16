@@ -31,6 +31,10 @@ class CrudNotetypeController extends CRUD
                 'slug' => 'flat',
                 'name' => 'flat',
                 'description' => 'flat',
+                'meaning' => [
+                    'type' => 'flat',
+                    'width' => '380px'
+                ],
                 'mySelfDelete' => 'links.delete'
             ]
         ]

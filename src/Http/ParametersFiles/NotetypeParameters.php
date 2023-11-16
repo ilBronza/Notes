@@ -12,8 +12,9 @@ class NotetypeParameters extends FieldsetParametersFile
 		return [
 			'general' => [
 				'fields' => [
-	                'name' => ['text' => 'string|required|max:8'],
-	                'description' => ['text' => 'string|required|max:255']
+	                'name' => ['text' => 'string|required|max:255'],
+	                'description' => ['text' => 'string|required|max:255'],
+	                'meaning' => ['text' => 'string|required|max:1024'],
 	            ]
 	        ]
 	    ];

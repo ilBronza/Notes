@@ -1,3 +1,4 @@
+@if(count($notes))
 <script type="text/javascript">
 	$("table.{{ $key }} form").submit(function (event)
 	{
@@ -27,15 +28,14 @@
 	});
 </script>
 
-@if(count($notes))
-<table class="uk-width-1-1 {{ $key }}">
+<table class="uk-width-1-1 uk-table {{ $key }}">
 	@foreach($notes as $note)
 	<tr>
-		<td style="width: 47px;">
+		<td style="width: 47px;" class="uk-visible@l">
 			<a href="{{ $note->getEditUrl() }}" uk-icon="file-edit"></a>
 		</td>
-		<td>{{ $note->getType()?->getName() }}</td>
-		<td><strong>{{ $note->getUserName() }} - {{ $note->getLastCompilationDate() }}: </strong></td>
+		<td class="uk-visible@l">{{ $note->getType()?->getName() }}</td>
+		<td class="uk-visible@l"><strong>{{ $note->getUserName() }} - {{ $note->getLastCompilationDate() }}: </strong></td>
 		<td>{{ $note->getText() }}</td>
 		<td>
 			<ul class="uk-list">
@@ -50,7 +50,7 @@
 							<img style="max-width: 100px; max-height: 60px;" src="{{ $file->getUrl() }}" />
 						@else
 						<span uk-icon="file">
-							{{ $file->name }}							
+							{{ $file->name }}
 						</span>
 						@endif
 					</a>

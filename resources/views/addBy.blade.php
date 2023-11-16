@@ -12,7 +12,7 @@
 <div class="uk-card uk-card-default">
 	<div class="uk-card-header">
 		<span class="uk-h3">
-			Stai aggiungendo una nota per l'elemento {{ __('notes.crudModels' . $subject->getCamelcaseClassBasename()) }}
+			Stai aggiungendo una nota per l'elemento {!! __('notes.crudModels' . $subject->getCamelcaseClassBasename()) !!}
 		</span>
 	</div>
 	<div class="uk-card-body">

@@ -122,7 +122,7 @@ class Notes
         );
     }
 
-    static function getFetcher(Model $model = null)
+    static function createFetcherByModel(Model $model = null) : ? Fetcher
     {
         if(! $model)
             return null;
@@ -138,6 +138,16 @@ class Notes
         $fetcher->addButton(
             static::getAddNotesForModelButton($model)
         );
+
+        return $fetcher;
+    }
+
+    static function getFetcher(Model $model = null)
+    {
+        if(! $model)
+            return; 
+
+        $fetcher = static::createFetcherByModel($model);
 
         return $fetcher->renderCard();
     }
