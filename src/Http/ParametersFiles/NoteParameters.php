@@ -11,10 +11,11 @@ class NoteParameters extends FieldsetParametersFile
 	{
 		return [
 			'general' => [
+                'translationPrefix' => 'notes::fields',
 				'fields' => [
-					'notes' => [
-						'textarea' => 'string|required|max:10240'
-					],
+                    'notes' => [
+                    	'textarea' => 'string|required|max:10240'
+                    ],
 
                     'type_slug' => [
                         'type' => 'select',

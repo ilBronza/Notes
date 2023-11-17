@@ -8,7 +8,8 @@ use IlBronza\Notes\Http\Controllers\CrudUnseenNoteController;
 Route::group([
 	'middleware' => ['web', 'auth'],
 	'prefix' => 'notes-management',
-	'as' => config('notes.routePrefix')
+	'as' => config('notes.routePrefix'),
+	'routeTranslationPrefix' => 'notes::routes.'	
 	],
 	function()
 	{

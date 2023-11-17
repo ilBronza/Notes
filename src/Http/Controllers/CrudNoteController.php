@@ -50,6 +50,7 @@ class CrudNoteController extends CRUD
     public static $tables = [
 
         'index' => [
+            'translationPrefix' => 'notes::fields',
             'fields' => 
             [
                 'imported' => 'boolean',
@@ -81,6 +82,7 @@ class CrudNoteController extends CRUD
         ],
 
         'related' => [
+            'translationPrefix' => 'notes::fields',
             'fields' => 
             [
                 'imported' => 'boolean',
@@ -111,6 +113,7 @@ class CrudNoteController extends CRUD
         ],
 
         'archived' => [
+            'translationPrefix' => 'notes::fields',
             'fields' => 
             [
                 'imported' => 'boolean',

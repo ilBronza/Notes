@@ -24,6 +24,7 @@ class CrudNotetypeController extends CRUD
     public static $tables = [
 
         'index' => [
+            'translationPrefix' => 'notes::fields',
             'fields' => 
             [
                 'mySelfEdit' => 'links.edit',

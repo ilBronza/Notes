@@ -12,6 +12,7 @@ class CrudUnseenNoteController extends CrudNoteController
     public static $tables = [
 
         'index' => [
+            'translationPrefix' => 'notes::fields',
             'fields' => 
             [
                 'mySelfPrimary' => 'primary',
