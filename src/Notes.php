@@ -26,7 +26,7 @@ class Notes
         return Button::create([
                 'href' => static::getRoutedModel($model, 'notes.add'),
                 'target' => '_blank',
-                'text' => __('notes::notes.addNote'),
+                'text' => 'notes::notes.addNote',
                 'icon' => 'plus'
             ]);
     }

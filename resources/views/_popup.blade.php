@@ -32,7 +32,7 @@
 		@if(\Auth::user()?->hasRole('administrator'))
 		<td>
 			<a
-				data-type="POST"
+				data-type="PUT"
 				class="ib-cell-ajax-button"
 				href="{{ $note->getArchiveUrl() }}">
 				<i class="fa fa-archive" aria-hidden="true"></i>
@@ -40,7 +40,7 @@
 		</td>
 		<td>
 			<a
-				data-type="PUT"
+				data-type="POST"
 				class="ib-cell-ajax-button"
 				href="{{ $note->getSeenUrl() }}">
 				<i class="fa fa-eye" aria-hidden="true"></i>

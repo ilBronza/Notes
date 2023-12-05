@@ -7,7 +7,7 @@
 		var url = $(this).attr('action');
 
 		var formData = {
-			_method : 'DELETE'
+			_method : $(that).find('input[name="_method"]').val()
 		};
 
 		$.ajax({

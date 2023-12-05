@@ -1,6 +1,7 @@
 <?php
 
 return [
+	'notes' => 'Note',
 	'notesFor' => 'Note su :type - :name',
 	'addNote' => 'Aggiungi nota',
 	'manage' => 'Note',

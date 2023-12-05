@@ -22,6 +22,8 @@ use Spatie\MediaLibrary\HasMedia;
 
 class Note extends BaseModel implements HasMedia
 {
+    public ? string $translationFolderPrefix = 'notes';
+
     use CRUDArchiverTrait;
     use InteractsWithMedia;
     use CRUDUseUuidTrait;
