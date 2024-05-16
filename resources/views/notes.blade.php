@@ -1,0 +1,1 @@
+{!! Notes::getFetcher($modelInstance) !!}

@@ -85,7 +85,7 @@ class Note extends BaseModel implements HasMedia
 
     public function getLastCompilationDate()
     {
-        return $this->updated_at->format(__('dates.humanShort'));
+        return $this->updated_at->format(__('crud::dates.humanShort'));
     }
 
     public function getUserName() : string
