@@ -2,6 +2,8 @@
 
 namespace IlBronza\Notes;
 
+use IlBronza\Notes\Models\Note;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider;
 
 class NotesServiceProvider extends ServiceProvider
@@ -13,6 +15,10 @@ class NotesServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Relation::morphMap([
+            'Note' => Note::getProjectClassname()
+        ]);
+
         $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'notes');
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'notes');
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');

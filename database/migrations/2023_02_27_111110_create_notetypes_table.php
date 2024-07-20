@@ -13,7 +13,7 @@ class CreateNoteTypesTable extends Migration
      */
     public function up()
     {
-        Schema::create(config('notes.types.table'), function (Blueprint $table) {
+        Schema::create(config('notes.models.notetype.table'), function (Blueprint $table) {
             $table->string('name');
             $table->string('slug', 16)->primary();
             $table->string('description', 255)->nullable();
@@ -30,6 +30,6 @@ class CreateNoteTypesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists(config('notes.types.table'));
+        Schema::dropIfExists(config('notes.models.notetype.table'));
     }
 }

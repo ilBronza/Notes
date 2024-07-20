@@ -10,6 +10,7 @@ use IlBronza\CRUD\Traits\Media\InteractsWithMedia;
 use IlBronza\CRUD\Traits\Model\CRUDArchiverTrait;
 use IlBronza\CRUD\Traits\Model\CRUDCreatedByUserTrait;
 use IlBronza\CRUD\Traits\Model\CRUDUseUuidTrait;
+use IlBronza\CRUD\Traits\Model\PackagedModelsTrait;
 use IlBronza\Notes\Notifications\NoteNotification;
 use IlBronza\Notes\Traits\Models\NoteSettersGettersTrait;
 use IlBronza\Notifications\Facades\Notification as IbNotificationFacade;
@@ -22,6 +23,11 @@ use Spatie\MediaLibrary\HasMedia;
 
 class Note extends BaseModel implements HasMedia
 {
+    use PackagedModelsTrait;
+    static $packageConfigPrefix = 'notes';
+    static $modelConfigPrefix = 'note';
+
+
     public ? string $translationFolderPrefix = 'notes';
 
     use CRUDArchiverTrait;
@@ -43,10 +49,10 @@ class Note extends BaseModel implements HasMedia
         'noteable_id',
     ];
 
-    public function getTable()
-    {
-    	return config('notes.table');
-    }
+    // public function getTable()
+    // {
+    // 	return config('notes.models.notes.table');
+    // }
 
 	public function noteable(): MorphTo
     {
@@ -113,6 +119,9 @@ class Note extends BaseModel implements HasMedia
 
     public function mustSendSlackNotification() : bool
     {
+        if(! config('notes.channels.slack'))
+            return false;
+
         return !! $this->slack;
     }
 

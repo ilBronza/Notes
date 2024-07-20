@@ -235,6 +235,11 @@ class CrudNoteController extends CRUD
         return $this->_edit($note);
     }
 
+    public function getAfterUpdatedRedirectUrl()
+    {
+        return $this->getModel()->getShowUrl();
+    }
+
     public function update(Request $request, $note)
     {
         $note = $this->findModel($note);

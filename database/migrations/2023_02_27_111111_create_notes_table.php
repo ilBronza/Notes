@@ -13,7 +13,7 @@ class CreateNotesTable extends Migration
      */
     public function up()
     {
-        Schema::create(config('notes.table'), function (Blueprint $table) {
+        Schema::create(config('notes.models.note.table'), function (Blueprint $table) {
             $table->uuid('id')->primary();
 
             $table->morphs('noteable');
@@ -21,7 +21,7 @@ class CreateNotesTable extends Migration
             $table->text('notes')->nullable();
             
             $table->string('type_slug', 16)->nullable();
-            $table->foreign('type_slug')->references('slug')->on(config('notes.types.table'));
+            $table->foreign('type_slug')->references('slug')->on(config('notes.models.notetype.table'));
 
             $table->unsignedBigInteger('user_id')->nullable();
             $table->foreign('user_id')->references('id')->on('users');
@@ -47,6 +47,6 @@ class CreateNotesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists(config('notes.table'));
+        Schema::dropIfExists(config('notes.models.note.table'));
     }
 }

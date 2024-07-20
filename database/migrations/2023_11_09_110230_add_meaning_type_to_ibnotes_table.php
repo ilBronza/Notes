@@ -13,7 +13,7 @@ class AddMeaningTypeToIbnotesTable extends Migration
      */
     public function up()
     {
-        Schema::table(config('notes.types.table'), function (Blueprint $table) {
+        Schema::table(config('notes.models.notetype.table'), function (Blueprint $table) {
             $table->string('meaning', 1024)->nullable();
         });
     }
@@ -25,7 +25,7 @@ class AddMeaningTypeToIbnotesTable extends Migration
      */
     public function down()
     {
-        Schema::table(config('notes.types.table'), function (Blueprint $table) {
+        Schema::table(config('notes.models.notetype.table'), function (Blueprint $table) {
             $table->dropColumn('meaning');
         });
     }

@@ -4,6 +4,7 @@ namespace IlBronza\Notes\Http\Controllers;
 
 use IlBronza\Notes\Facades\Notes;
 use IlBronza\Notes\Http\ParametersFiles\NoteParameters;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\Request;
 
 class CrudAddNoteToModelController extends CrudNoteController
@@ -21,7 +22,10 @@ class CrudAddNoteToModelController extends CrudNoteController
     {
         $this->setReturnUrlToPrevious();
 
-        $model = $class::find($key);
+        if(! $morphedClass = Relation::getMorphedModel($class))
+            $morphedClass = $class;
+
+        $model = $morphedClass::find($key);
 
         $subject = $model->getNotesSubject();
         $elements = $model->getNotesRelationships();

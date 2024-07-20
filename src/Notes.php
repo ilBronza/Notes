@@ -3,6 +3,8 @@
 namespace IlBronza\Notes;
 
 use IlBronza\Buttons\Button;
+use IlBronza\CRUD\Providers\RouterProvider\RoutedObjectInterface;
+use IlBronza\CRUD\Traits\IlBronzaPackages\IlBronzaPackagesTrait;
 use IlBronza\Notes\Models\Notetype;
 use IlBronza\Notes\Traits\NotesMenuTrait;
 use IlBronza\Notes\Traits\NotesRoutingTrait;
@@ -11,14 +13,18 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
-class Notes
+class Notes implements RoutedObjectInterface
 {
+    use IlBronzaPackagesTrait;
+
+    static $packageConfigPrefix = 'notes';
+
     use NotesRoutingTrait;
     use NotesMenuTrait;
 
     static function getNoteClass()
     {
-        return config('notes.class');
+        return config('notes.models.note.class');
     }
 
     static function getAddNotesForModelButton(Model $model)

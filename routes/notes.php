@@ -1,5 +1,6 @@
 <?php
 
+use IlBronza\Notes\Facades\Notes;
 use IlBronza\Notes\Http\Controllers\CrudNoteByModelController;
 use IlBronza\Notes\Http\Controllers\CrudNoteController;
 use IlBronza\Notes\Http\Controllers\CrudNotetypeController;
@@ -28,10 +29,10 @@ Route::group([
 
 		Route::get('notes-by/{class}/{key}', [CrudNoteByModelController::class, 'notesBy'])->name('notes.by');
 
-		Route::get('notes-add-by/{class}/{key}', [config('notes.controllers.addNoteController'), 'addBy'])->name('notes.addBy');
 
-		Route::get('notes-add-for/{class}/{key}', [config('notes.controllers.addNoteController'), 'addFor'])->name('notes.add');
-		Route::post('notes-add-for/{class}/{key}', [config('notes.controllers.addNoteController'), 'addFor'])->name('notes.addFor');
+		Route::get('notes-add-by/{class}/{key}', [Notes::getController('note', 'addNote'), 'addBy'])->name('notes.addBy');
+		Route::get('notes-add-for/{class}/{key}', [Notes::getController('note', 'addNote'), 'addFor'])->name('notes.add');
+		Route::post('notes-add-for/{class}/{key}', [Notes::getController('note', 'addNote'), 'addFor'])->name('notes.addFor');
 	});
 
 

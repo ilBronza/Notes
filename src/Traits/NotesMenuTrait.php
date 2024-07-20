@@ -20,7 +20,7 @@ trait NotesMenuTrait
 
         $notesButton = $menu->createButton([
             'name' => 'notesManager',
-            'icon' => 'user-gear',
+            'icon' => 'clipboard',
             'text' => 'notes::notes.manage'
         ]);
 
@@ -56,7 +56,7 @@ trait NotesMenuTrait
         $notesButton->addChild(
             $menu->createButton([
                 'name' => 'notes.manageTypes',
-                'icon' => 'user-gear',
+                'icon' => 'gear',
                 'href' => static::route('notetypes.index'),
                 'text' => 'notes::notes.manageTypes'
             ])

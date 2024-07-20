@@ -20,7 +20,7 @@ class NoteParameters extends FieldsetParametersFile
                     'type_slug' => [
                         'type' => 'select',
                         'multiple' => false,
-                        'rules' => 'string|' . config('notes.types.requiredRule') . '|exists:' . config('notes.types.table') . ',slug',
+                        'rules' => 'string|' . config('notes.types.requiredRule') . '|exists:' . config('notes.models.notetype.table') . ',slug',
                         'relation' => 'type',
                     ],
 
