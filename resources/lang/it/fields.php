@@ -17,6 +17,6 @@ return [
 	'noteable_type' => 'Elemento',
 	'mySelfSeeElement.noteable' => 'Elemento',
 	'mySelfName.noteable' => 'Elemento',
-	'mySelfClient.noteable.client.name' => 'Cliente',
+	'mySelfClient.noteable.client.name' => 'Azienda',
 
 ];

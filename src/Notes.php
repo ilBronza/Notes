@@ -13,6 +13,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
+use function __;
+
 class Notes implements RoutedObjectInterface
 {
     use IlBronzaPackagesTrait;
@@ -128,32 +130,51 @@ class Notes implements RoutedObjectInterface
         );
     }
 
-    static function createFetcherByModel(Model $model = null) : ? Fetcher
+	static function createFetcherByModel(Model $model = null) : ? Fetcher
+	{
+		if(! $model)
+			return null;
+
+		$fetcher = new Fetcher([
+			'title' => __('notes::notes.notesFor', [
+				'type' => __('notes.crudModels' . $model->getCamelcaseClassBasename()),
+				'name' => $model->getName()
+			]),
+			'url' =>  static::getRoutedModel($model, 'notes.by')
+		]);
+
+		$fetcher->addButton(
+			static::getAddNotesForModelButton($model)
+		);
+
+		return $fetcher;
+	}
+
+	static function createFlatFetcherByModel(Model $model = null) : ? Fetcher
+	{
+		if(! $model)
+			return null;
+
+		$fetcher = new Fetcher([
+			'url' =>  static::getRoutedModel($model, 'notes.by')
+		]);
+
+		$fetcher->addButton(
+			static::getAddNotesForModelButton($model)
+		);
+
+		return $fetcher;
+	}
+
+	static function getFetcher(Model $model = null, ? bool $flat = false)
     {
         if(! $model)
-            return null;
+            return;
 
-        $fetcher = new Fetcher([
-            'title' => __('notes::notes.notesFor', [
-                'type' => __('notes.crudModels' . $model->getCamelcaseClassBasename()),
-                'name' => $model->getName()
-            ]),
-            'url' =>  static::getRoutedModel($model, 'notes.by')
-        ]);
-
-        $fetcher->addButton(
-            static::getAddNotesForModelButton($model)
-        );
-
-        return $fetcher;
-    }
-
-    static function getFetcher(Model $model = null)
-    {
-        if(! $model)
-            return; 
-
-        $fetcher = static::createFetcherByModel($model);
+		if($flat)
+			$fetcher = static::createFlatFetcherByModel($model);
+		else
+			$fetcher = static::createFetcherByModel($model);
 
         return $fetcher->renderCard();
     }

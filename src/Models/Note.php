@@ -13,7 +13,6 @@ use IlBronza\CRUD\Traits\Model\CRUDUseUuidTrait;
 use IlBronza\CRUD\Traits\Model\PackagedModelsTrait;
 use IlBronza\Notes\Notifications\NoteNotification;
 use IlBronza\Notes\Traits\Models\NoteSettersGettersTrait;
-use IlBronza\Notifications\Facades\Notification as IbNotificationFacade;
 use IlBronza\Notifications\Notification as IbNotification;
 use IlBronza\Notifications\Notifications\SlackNotification;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -23,262 +22,256 @@ use Spatie\MediaLibrary\HasMedia;
 
 class Note extends BaseModel implements HasMedia
 {
-    use PackagedModelsTrait;
-    static $packageConfigPrefix = 'notes';
-    static $modelConfigPrefix = 'note';
+	use PackagedModelsTrait;
 
+	static $packageConfigPrefix = 'notes';
+	static $modelConfigPrefix = 'note';
 
-    public ? string $translationFolderPrefix = 'notes';
+	public ?string $translationFolderPrefix = 'notes';
 
-    use CRUDArchiverTrait;
-    use InteractsWithMedia;
-    use CRUDUseUuidTrait;
+	use CRUDArchiverTrait;
+	use InteractsWithMedia;
+	use CRUDUseUuidTrait;
 
+	protected $keyType = 'string';
 	/**
-	 *  CRUDCreatedByUserTrait 
+	 *  CRUDCreatedByUserTrait
 	 **/
 	use CRUDCreatedByUserTrait;
 
+	use NoteSettersGettersTrait;
 
-    use NoteSettersGettersTrait;
+	protected $deletingRelationships = ['media'];
 
-    protected $deletingRelationships = ['media'];
+	protected $fillable = [
+		'noteable_type',
+		'noteable_id',
+	];
 
-    protected $fillable = [
-        'noteable_type',
-        'noteable_id',
-    ];
+	// public function getTable()
+	// {
+	// 	return config('notes.models.notes.table');
+	// }
 
-    // public function getTable()
-    // {
-    // 	return config('notes.models.notes.table');
-    // }
+	public static function boot()
+	{
+		parent::boot();
 
-	public function noteable(): MorphTo
-    {
-        return $this->morphTo();
-    }
+		static::saving(function ($note)
+		{
+			if ($note->isDirty('slack') && $note->mustSendSlackNotification())
+				$note->sendSlackNotification();
 
-    public function type() : BelongsTo
-    {
-        return $this->belongsTo(Notetype::class);
-    }
+			if ($note->isDirty('create_notification') && $note->mustCreateNotification())
+				$note->createNotification();
+		});
+	}
 
-    public function getText()
-    {
-        return $this->notes;
-    }
+	public function mustSendSlackNotification() : bool
+	{
+		if (! config('notes.channels.slack'))
+			return false;
 
-    public function getType() : ? Notetype
-    {
-        return $this->type;
-    }
+		return ! ! $this->slack;
+	}
 
-    public function getTypeSlug() : ? string
-    {
-        return $this->getType()?->getKey();
-    }
+	public function sendSlackNotification()
+	{
+		Notification::route(
+			'slack', $this->getSlackWebhook()
+		)->notify(
+				new SlackNotification(
+					$this->getMessageTypePrefix() . $this->getText()
+				)
+			);
+	}
 
-    public function getTypeName()
-    {
-        return $this->getType()?->getName();        
-    }
+	public function getSlackWebhook() : string
+	{
+		return config(
+			$this->getTypeWebhookName(), config('notes.slack.webhooks.default')
+		);
+	}
 
-    public function getImages()
-    {
-        return $this->media;
-    }
+	public function getTypeWebhookName() : string
+	{
+		return 'notes.slack.webhooks.' . $this->getTypeSlug();
+	}
 
-    public function getLastCompilationDate()
-    {
-        return $this->updated_at->format(__('crud::dates.humanShort'));
-    }
+	public function getTypeSlug() : ?string
+	{
+		return $this->getType()?->getKey();
+	}
 
-    public function getUserName() : string
-    {
-        if($user = $this->getUser())
-            return $user->getName();
+	public function getMessageTypePrefix() : ?string
+	{
+		if (! ($type = $this->getType()))
+			return null;
 
-        return __('notes::notes.unknownUser');
-    }
+		if ($this->existsTypeWebhook())
+			return null;
 
-    public function getUserId()
-    {
-        return $this->user_id;
-    }
+		return $type->getName() . ":: ";
+	}
 
-    public function getUser() : ? User
-    {
-        if(! $userKey = $this->getUserId())
-            return null;
+	public function existsTypeWebhook() : bool
+	{
+		return ! ! config(
+			$this->getTypeWebhookName(), false
+		);
+	}
 
-        return app('accountmanager')->getCachedUserById(
-            $this->getUserId($userKey)
-        );
-    }
+	public function getText()
+	{
+		return $this->notes;
+	}
 
-    public function mustSendSlackNotification() : bool
-    {
-        if(! config('notes.channels.slack'))
-            return false;
+	public function mustCreateNotification() : bool
+	{
+		return ! ! $this->create_notification;
+	}
 
-        return !! $this->slack;
-    }
+	public function createNotification()
+	{
+		IbNotification::roles('administrator')->users(
+				User::inRandomOrder()->take(5)->get()
+			)->notification(
+				new NoteNotification(
+					$this
+				)
+			)->send();
+	}
 
-    public function mustCreateNotification() : bool
-    {
-        return !! $this->create_notification;
-    }
+	static function getSeeBulkUrl()
+	{
+		return route(config('notes.routePrefix') . 'notes.seeBulk');
+	}
 
-    public function getTypeWebhookName() : string
-    {
-        return 'notes.slack.webhooks.' . $this->getTypeSlug();
-    }
+	static function getArchiveBulkUrl()
+	{
+		return route(config('notes.routePrefix') . 'notes.archiveBulk');
+	}
 
-    public function existsTypeWebhook() : bool
-    {
-        return !! config(
-            $this->getTypeWebhookName(),
-            false
-        );
-    }
+	public function noteable() : MorphTo
+	{
+		return $this->morphTo();
+	}
 
-    public function getSlackWebhook() : string
-    {
-        return config(
-            $this->getTypeWebhookName(),
-            config('notes.slack.webhooks.default')
-        );
-    }
+	public function type() : BelongsTo
+	{
+		return $this->belongsTo(Notetype::class);
+	}
 
-    public function getMessageTypePrefix() : ? string
-    {
-        if(! ($type = $this->getType()))
-            return null;
+	public function getTypeName()
+	{
+		return $this->getType()?->getName();
+	}
 
-        if($this->existsTypeWebhook())
-            return null;
+	public function getType() : ?Notetype
+	{
+		return $this->type;
+	}
 
-        return $type->getName() . ":: ";
-    }
+	public function getImages()
+	{
+		return $this->media;
+	}
 
-    public function sendSlackNotification()
-    {
-        Notification::route(
-            'slack',
-            $this->getSlackWebhook()
-        )
-        ->notify(new SlackNotification(
-            $this->getMessageTypePrefix() . $this->getText()
-        )); 
-    }
+	public function getShowUrl(array $data = [])
+	{
+		return route(config('notes.routePrefix') . 'notes.show', [$this]);
+	}
 
-    public function createNotification()
-    {
-        IbNotification::roles('administrator')
-            ->users(
-                User::inRandomOrder()->take(5)->get()
-            )
-            ->notification(
-                new NoteNotification(
-                    $this
-                )
-            )
-            ->send();
-    }
+	public function getEditUrl(array $data = [])
+	{
+		return route(config('notes.routePrefix') . 'notes.edit', [$this]);
+	}
 
-    public static function boot()
-    {
-        parent::boot();
+	public function getSeenUrl(array $data = [])
+	{
+		return route(config('notes.routePrefix') . 'notes.seen', [$this]);
+	}
 
-        static::saving(function ($note)
-        {
-            if($note->isDirty('slack') && $note->mustSendSlackNotification())
-                $note->sendSlackNotification();
+	public function scopeByTypes($query, array $types)
+	{
+		return $query->whereIn('type_slug', $types);
+	}
 
-            if($note->isDirty('create_notification') && $note->mustCreateNotification())
-                $note->createNotification();
-        });
-    }
+	public function scopeUnseen($query)
+	{
+		return $query->whereNull('seen_at');
+	}
 
-    static function getSeeBulkUrl()
-    {
-        return route(config('notes.routePrefix') . 'notes.seeBulk');
-    }
+	public function canBeDeleted()
+	{
+		return true;
+	}
 
-    static function getArchiveBulkUrl()
-    {
-        return route(config('notes.routePrefix') . 'notes.archiveBulk');
-    }
+	public function canBeArchived()
+	{
+		return true;
+	}
 
-    public function getShowUrl(array $data = [])
-    {
-        return route(config('notes.routePrefix') . 'notes.show', [$this]);
-    }
+	public function getDeleteButton()
+	{
+		return '<form method="POST" onSubmit="return confirm(\'Sei sicuro?\');" action="' . $this->getDeleteUrl() . '">' . csrf_field() . ' ' . method_field('DELETE') . '<button class="uk-button uk-button-small" type="submit"><i class="fa-solid fa-trash"></i></button></form>';
+	}
 
-    public function getEditUrl(array $data = [])
-    {
-        return route(config('notes.routePrefix') . 'notes.edit', [$this]);
-    }
+	public function getDeleteUrl(array $data = [])
+	{
+		return route(config('notes.routePrefix') . 'notes.destroy', [$this]);
+	}
 
-    public function getDeleteUrl(array $data = [])
-    {
-        return route(config('notes.routePrefix') . 'notes.destroy', [$this]);
-    }
+	public function getArchiveButton()
+	{
+		return '<form method="POST" onSubmit="return confirm(\'Sei sicuro?\');" action="' . $this->getArchiveUrl() . '">' . csrf_field() . ' ' . method_field('PUT') . '<button class="uk-button uk-button-small" type="submit"><i class="fa-solid fa-archive"></i></button></form>';
+	}
 
-    public function getArchiveUrl(array $data = [])
-    {
-        return route(config('notes.routePrefix') . 'notes.archive', [$this]);
-    }
+	public function getArchiveUrl(array $data = [])
+	{
+		return route(config('notes.routePrefix') . 'notes.archive', [$this]);
+	}
 
-    public function getSeenUrl(array $data = [])
-    {
-        return route(config('notes.routePrefix') . 'notes.seen', [$this]);
-    }
+	public function seen()
+	{
+		$this->seen_at = Carbon::now();
 
-    public function scopeByTypes($query, array $types)
-    {
-        return $query->whereIn('type_slug', $types);
-    }
+		if (array_key_exists('seen_by', $this->attributes))
+			$this->seen_by = Auth::id();
 
-    public function scopeUnseen($query)
-    {
-        return $query->whereNull('seen_at');
-    }
+		$this->save();
+	}
 
-    public function canBeDeleted()
-    {
-        return true;
-    }
+	public function getWholeString()
+	{
+		return "{$this->getType()?->getName()} - {$this->getUserName()}: {$this->getLastCompilationDate()} -> {$this->getText()}";
+	}
 
-    public function canBeArchived()
-    {
-        return true;
-    }
+	public function getUserName() : string
+	{
+		if ($user = $this->getUser())
+			return $user->getName();
 
-    public function getDeleteButton()
-    {
-        return '<form method="POST" onSubmit="return confirm(\'Sei sicuro?\');" action="' . $this->getDeleteUrl() . '">' . csrf_field() . ' ' . method_field('DELETE') . '<button class="uk-button uk-button-small" type="submit"><i class="fa-solid fa-trash"></i></button></form>';
-    }
+		return __('notes::notes.unknownUser');
+	}
 
-    public function getArchiveButton()
-    {
-        return '<form method="POST" onSubmit="return confirm(\'Sei sicuro?\');" action="' . $this->getArchiveUrl() . '">' . csrf_field() . ' ' . method_field('PUT') . '<button class="uk-button uk-button-small" type="submit"><i class="fa-solid fa-archive"></i></button></form>';
-    }
+	public function getUser() : ?User
+	{
+		if (! $userKey = $this->getUserId())
+			return null;
 
+		return app('accountmanager')->getCachedUserById(
+			$this->getUserId($userKey)
+		);
+	}
 
-    public function seen()
-    {
-        $this->seen_at = Carbon::now();
+	public function getUserId()
+	{
+		return $this->user_id;
+	}
 
-        if(array_key_exists('seen_by', $this->attributes))
-            $this->seen_by = Auth::id();
-
-        $this->save();
-    }
-
-    public function getWholeString()
-    {
-        return "{$this->getType()?->getName()} - {$this->getUserName()}: {$this->getLastCompilationDate()} -> {$this->getText()}";
-    }
+	public function getLastCompilationDate()
+	{
+		return $this->updated_at->format(__('crud::dates.humanShort'));
+	}
 }
