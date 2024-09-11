@@ -70,9 +70,9 @@ class NotesServiceProvider extends ServiceProvider
 		], 'notes.config');
 
 		// Publishing the views.
-		/*$this->publishes([
-			__DIR__.'/../resources/views' => base_path('resources/views/vendor/ilbronza'),
-		], 'notes.views');*/
+		$this->publishes([
+			__DIR__.'/../resources/views' => base_path('resources/views/vendor/notes'),
+		], 'notes.views');
 
 		// Publishing assets.
 		/*$this->publishes([
