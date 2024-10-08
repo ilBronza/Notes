@@ -48,7 +48,7 @@ class Note extends BaseModel implements HasMedia
 		'noteable_id',
 	];
 
-	// public function getTable()
+	// public function getTable() : string
 	// {
 	// 	return config('notes.models.notes.table');
 	// }
@@ -80,10 +80,10 @@ class Note extends BaseModel implements HasMedia
 		Notification::route(
 			'slack', $this->getSlackWebhook()
 		)->notify(
-				new SlackNotification(
-					$this->getMessageTypePrefix() . $this->getText()
-				)
-			);
+			new SlackNotification(
+				$this->getMessageTypePrefix() . $this->getText()
+			)
+		);
 	}
 
 	public function getSlackWebhook() : string
@@ -134,12 +134,12 @@ class Note extends BaseModel implements HasMedia
 	public function createNotification()
 	{
 		IbNotification::roles('administrator')->users(
-				User::inRandomOrder()->take(5)->get()
-			)->notification(
-				new NoteNotification(
-					$this
-				)
-			)->send();
+			User::inRandomOrder()->take(5)->get()
+		)->notification(
+			new NoteNotification(
+				$this
+			)
+		)->send();
 	}
 
 	static function getSeeBulkUrl()
