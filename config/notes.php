@@ -7,6 +7,8 @@ use IlBronza\Notes\Models\Notetype;
 return [
     'routePrefix' => 'notesmanager',
 
+	'enabled' => true,
+
     'models' => [
         'note' => [
             'class' => Note::class,

@@ -214,7 +214,7 @@ class Note extends BaseModel implements HasMedia
 
 	public function getDeleteButton()
 	{
-		return '<form method="POST" onSubmit="return confirm(\'Sei sicuro?\');" action="' . $this->getDeleteUrl() . '">' . csrf_field() . ' ' . method_field('DELETE') . '<button class="uk-button uk-button-small" type="submit"><i class="fa-solid fa-trash"></i></button></form>';
+		return '<form method="POST" action="' . $this->getDeleteUrl() . '">' . csrf_field() . ' ' . method_field('DELETE') . '<button class="uk-button uk-button-small" type="submit"><i class="fa-solid fa-trash"></i></button></form>';
 	}
 
 	public function getDeleteUrl(array $data = [])

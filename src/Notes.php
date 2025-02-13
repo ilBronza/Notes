@@ -17,122 +17,122 @@ use function __;
 
 class Notes implements RoutedObjectInterface
 {
-    use IlBronzaPackagesTrait;
+	use IlBronzaPackagesTrait;
 
-    static $packageConfigPrefix = 'notes';
+	static $packageConfigPrefix = 'notes';
 
-    use NotesRoutingTrait;
-    use NotesMenuTrait;
+	use NotesRoutingTrait;
+	use NotesMenuTrait;
 
-    static function getNoteClass()
-    {
-        return config('notes.models.note.class');
-    }
-
-    static function getAddNotesForModelButton(Model $model)
-    {
-        return Button::create([
-                'href' => static::getRoutedModel($model, 'notes.add'),
-                'target' => '_blank',
-                'text' => 'notes::notes.addNote',
-                'icon' => 'plus'
-            ]);
-    }
-
-    static function makeNoteByMorphData(string $type, string $id)
-    {
-        return static::getNoteClass()::create([
-            'noteable_type' => $type,
-            'noteable_id' => $id,
-        ]);
-    }
-
-    static function getFilteredPDFStringByTypes(Model $model, array $types)
-    {
-        $notes = $model->getNotesByTypes($types);
-
-        return view('notes::string', compact('notes'));
-    }
-
-    static function getAllNotesWithRelated(Model $model, array $related = []) : Collection
-    {
-        $notes = collect();
-
-        $notes->push(
-            $model->notes()->with('noteable')->get()
-        );
-
-        foreach($related as $elements)
-            if(class_basename($elements) == 'Collection')
-                foreach($elements as $element)
-                    $notes->push(
-                        $element->notes()->with('noteable')->get()
-                    );
-
-            else if($elements)
-                $notes->push(
-                    $elements->notes()->with('noteable')->get()
-                );
-
-        return $notes->flatten();
-    }
-
-    static function getNotesWithRelatedByTypes(Model $model, array $related = [], array $types) : Collection
-    {
-        $notes = collect();
-
-        $notes->push(
-            $model->notes()->byTypes($types)->with('noteable')->get()
-        );
-
-        foreach($related as $elements)
-            if(class_basename($elements) == 'Collection')
-                foreach($elements as $element)
-                    $notes->push(
-                        $element->notes()->byTypes($types)->with('noteable')->get()
-                    );
-
-            else if($elements)
-                $notes->push(
-                    $elements->notes()->byTypes($types)->with('noteable')->get()
-                );
-
-        return $notes->flatten();
-    }
-
-    static function getNotesNumberWithRelated(Model $model, callable $getRelated) : int
-    {
-        $result = $model->notes()->count();
-
-        foreach($getRelated() as $elements)
-            if(class_basename($elements) == 'Collection')
-                foreach($elements as $element)
-                    $result += $element->notes()->count();
-
-            else if($elements)
-                $result += $elements->notes()->count();
-
-        return $result;
-    }
-
-    static function getCachedNotesNumberWithRelated(Model $model, callable $getRelated) : int
-    {
-        return cache()->remember(
-            $model->cacheKey('notesCount'),
-            360000,
-            function() use($model, $getRelated)
-            {
-                return static::getNotesNumberWithRelated(
-                    $model,
-                    $getRelated
-                );
-            }
-        );
-    }
-
-	static function createFetcherByModel(Model $model = null) : ? Fetcher
+	static function getNoteClass()
 	{
-		if(! $model)
+		return config('notes.models.note.class');
+	}
+
+	static function getAddNotesForModelButton(Model $model)
+	{
+		$button = Button::create([
+			'href' => static::getRoutedModel($model, 'notes.add'),
+			'text' => trans('notes::notes.addNote'),
+			'icon' => 'plus'
+		]);
+
+		$button->renderIFrame();
+
+		return $button;
+	}
+
+	static function makeNoteByMorphData(string $type, string $id)
+	{
+		return static::getNoteClass()::create([
+			'noteable_type' => $type,
+			'noteable_id' => $id,
+		]);
+	}
+
+	static function getFilteredPDFStringByTypes(Model $model, array $types)
+	{
+		$notes = $model->getNotesByTypes($types);
+
+		return view('notes::string', compact('notes'));
+	}
+
+	static function getAllNotesWithRelated(Model $model, array $related = []) : Collection
+	{
+		$notes = collect();
+
+		$notes->push(
+			$model->notes()->with('noteable')->get()
+		);
+
+		foreach ($related as $elements)
+			if (class_basename($elements) == 'Collection')
+				foreach ($elements as $element)
+					$notes->push(
+						$element->notes()->with('noteable')->get()
+					);
+
+			else if ($elements)
+				$notes->push(
+					$elements->notes()->with('noteable')->get()
+				);
+
+		return $notes->flatten();
+	}
+
+	static function getNotesWithRelatedByTypes(Model $model, array $related = [], array $types) : Collection
+	{
+		$notes = collect();
+
+		$notes->push(
+			$model->notes()->byTypes($types)->with('noteable')->get()
+		);
+
+		foreach ($related as $elements)
+			if (class_basename($elements) == 'Collection')
+				foreach ($elements as $element)
+					$notes->push(
+						$element->notes()->byTypes($types)->with('noteable')->get()
+					);
+
+			else if ($elements)
+				$notes->push(
+					$elements->notes()->byTypes($types)->with('noteable')->get()
+				);
+
+		return $notes->flatten();
+	}
+
+	static function getNotesNumberWithRelated(Model $model, callable $getRelated) : int
+	{
+		$result = $model->notes()->count();
+
+		foreach ($getRelated() as $elements)
+			if (class_basename($elements) == 'Collection')
+				foreach ($elements as $element)
+					$result += $element->notes()->count();
+
+			else if ($elements)
+				$result += $elements->notes()->count();
+
+		return $result;
+	}
+
+	static function getCachedNotesNumberWithRelated(Model $model, callable $getRelated) : int
+	{
+		return cache()->remember(
+			$model->cacheKey('notesCount'), 360000, function () use ($model, $getRelated)
+		{
+			return static::getNotesNumberWithRelated(
+				$model, $getRelated
+			);
+		}
+		);
+	}
+
+	static function createFetcherByModel(Model $model = null) : ?Fetcher
+	{
+		if (! $model)
 			return null;
 
 		$fetcher = new Fetcher([
@@ -140,7 +140,7 @@ class Notes implements RoutedObjectInterface
 				'type' => __('notes.crudModels' . $model->getCamelcaseClassBasename()),
 				'name' => $model->getName()
 			]),
-			'url' =>  static::getRoutedModel($model, 'notes.by')
+			'url' => static::getRoutedModel($model, 'notes.by')
 		]);
 
 		$fetcher->addButton(
@@ -150,13 +150,13 @@ class Notes implements RoutedObjectInterface
 		return $fetcher;
 	}
 
-	static function createFlatFetcherByModel(Model $model = null) : ? Fetcher
+	static function createFlatFetcherByModel(Model $model = null) : ?Fetcher
 	{
-		if(! $model)
+		if (! $model)
 			return null;
 
 		$fetcher = new Fetcher([
-			'url' =>  static::getRoutedModel($model, 'notes.by')
+			'url' => static::getRoutedModel($model, 'notes.by')
 		]);
 
 		$fetcher->addButton(
@@ -166,34 +166,34 @@ class Notes implements RoutedObjectInterface
 		return $fetcher;
 	}
 
-	static function getFetcher(Model $model = null, ? bool $flat = false)
-    {
-        if(! $model)
-            return;
+	static function getFetcher(Model $model = null, ?bool $flat = false)
+	{
+		if (! $model)
+			return;
 
-		if($flat)
+		if ($flat)
 			$fetcher = static::createFlatFetcherByModel($model);
 		else
 			$fetcher = static::createFetcherByModel($model);
 
-        return $fetcher->renderCard();
-    }
+		return $fetcher->renderCard();
+	}
 
-    static function getNotetypeByName(string $slug) : Notetype
-    {
-        if($notetype = Notetype::where('name', $slug)->first())
-            return $notetype;
+	static function getNotetypeByName(string $slug) : Notetype
+	{
+		if ($notetype = Notetype::where('name', $slug)->first())
+			return $notetype;
 
-        return Notetype::createByName($slug);
-    }
+		return Notetype::createByName($slug);
+	}
 
-    static function cacheKey(Model $model, string $key)
-    {
-        return implode("_", [
-            class_basename($model),
-            $model->updated_at ?? '',
-            $model->getKey(),
-            Str::slug($key)
-        ]);        
-    }
+	static function cacheKey(Model $model, string $key)
+	{
+		return implode("_", [
+			class_basename($model),
+			$model->updated_at ?? '',
+			$model->getKey(),
+			Str::slug($key)
+		]);
+	}
 }
