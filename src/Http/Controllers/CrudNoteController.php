@@ -283,7 +283,8 @@ class CrudNoteController extends CRUD
 
     public function destroy($note)
     {
-        $note = $this->findModel($note);
+        $note = $this->getModelClass()::withArchived()->find($note);
+
         return $this->_destroy($note);
     }
 

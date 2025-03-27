@@ -84,21 +84,46 @@ class Notes implements RoutedObjectInterface
 	{
 		$notes = collect();
 
+		if(! $model->relationLoaded('notes'))
+			$model->load('notes');
+
 		$notes->push(
-			$model->notes()->byTypes($types)->with('noteable')->get()
+			$model->notes->filter(function($note) use($types)
+				{
+					return in_array($note->type_slug, $types);
+				})
 		);
 
 		foreach ($related as $elements)
 			if (class_basename($elements) == 'Collection')
+			{
 				foreach ($elements as $element)
+				{
+					if(! $element->relationLoaded('notes'))
+						$element->load('notes.noteable');
+
 					$notes->push(
-						$element->notes()->byTypes($types)->with('noteable')->get()
+						$element->notes->filter(function($note) use($types)
+							{
+								return in_array($note->type_slug, $types);
+							})
 					);
+				}
+
+			}
 
 			else if ($elements)
+			{
+				if(! $elements->relationLoaded('notes'))
+					$elements->load('notes.noteable');
+
 				$notes->push(
-					$elements->notes()->byTypes($types)->with('noteable')->get()
+					$element->notes->filter(function($note) use($types)
+							{
+								return in_array($note->type_slug, $types);
+							})
 				);
+			}
 
 		return $notes->flatten();
 	}

@@ -63,7 +63,7 @@ class CrudNotetypeController extends CRUD
 
     public function getModelClass() : string
     {
-        $this->modelClass = config('notes.types.class');
+        $this->modelClass = config('notes.models.notetype.class');
 
         return $this->modelClass;
     }

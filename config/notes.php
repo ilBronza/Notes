@@ -20,6 +20,7 @@ return [
         'notetype' => [
             'class' => Notetype::class,
             'table' => 'ibnotes_types',
+            'requiredRule' => 'required'
         ]
     ],
 
