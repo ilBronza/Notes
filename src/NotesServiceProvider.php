@@ -2,12 +2,14 @@
 
 namespace IlBronza\Notes;
 
+use IlBronza\CRUD\Traits\IlBronzaPackages\IlBronzaServiceProviderPackagesTrait;
 use IlBronza\Notes\Models\Note;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider;
 
 class NotesServiceProvider extends ServiceProvider
 {
+	use IlBronzaServiceProviderPackagesTrait;
 	/**
 	 * Perform post-registration booting of services.
 	 *

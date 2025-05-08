@@ -6,6 +6,12 @@ use IlBronza\Notes\Http\Controllers\CrudNoteController;
 use IlBronza\Notes\Http\Controllers\CrudNotetypeController;
 use IlBronza\Notes\Http\Controllers\CrudUnseenNoteController;
 
+use IlBronza\Notes\Http\Controllers\Tasks\TaskCreateStoreController;
+use IlBronza\Notes\Http\Controllers\Tasks\TaskDestroyController;
+use IlBronza\Notes\Http\Controllers\Tasks\TaskEditUpdateController;
+use IlBronza\Notes\Http\Controllers\Tasks\TaskIndexController;
+use IlBronza\Vehicles\Vehicles;
+
 Route::group([
 	'middleware' => ['web', 'auth'],
 	'prefix' => 'notes-management',
@@ -37,3 +43,34 @@ Route::group([
 
 
 
+Route::group([
+	'middleware' => ['web', 'auth'],
+	'prefix' => 'tasks-management',
+	'as' => config('notes.routePrefixTasks'),
+	'routeTranslationPrefix' => 'notes::routes.'
+],
+	function()
+	{
+		Route::get('', [TaskIndexController::class, 'index'])->name('index');
+		Route::post('', [TaskCreateStoreController::class, 'store'])->name('store');
+		Route::get('create', [TaskCreateStoreController::class, 'create'])->name('create');
+		Route::get('{task}/edit', [TaskEditUpdateController::class, 'edit'])->name('edit');
+		Route::put('{task}', [TaskEditUpdateController::class, 'update'])->name('update');
+
+
+		Route::delete('{task}/delete', [TaskDestroyController::class, 'destroy'])->name('destroy');
+	});
+
+
+
+
+
+
+
+// Route::get('create', [Vehicles::getController('type', 'create'), 'create'])->name('types.create');
+// Route::post('', [Vehicles::getController('type', 'store'), 'store'])->name('types.store');
+// Route::get('{type}', [Vehicles::getController('type', 'show'), 'show'])->name('types.show');
+// Route::get('{type}/edit', [Vehicles::getController('type', 'edit'), 'edit'])->name('types.edit');
+// Route::put('{type}', [Vehicles::getController('type', 'edit'), 'update'])->name('types.update');
+
+// Route::delete('{type}/delete', [Vehicles::getController('type', 'destroy'), 'destroy'])->name('types.destroy');

@@ -232,6 +232,7 @@ class CrudNoteController extends CRUD
     public function edit($note)
     {
         $note = $this->findModel($note);
+
         return $this->_edit($note);
     }
 

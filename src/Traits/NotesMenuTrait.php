@@ -9,14 +9,14 @@ trait NotesMenuTrait
         if(! $menu = app('menu'))
             return;
 
-        $button = $menu->provideButton([
+        $settingsButton = $menu->provideButton([
                 'text' => 'generals.settings',
                 'name' => 'settings',
                 'icon' => 'gear',
                 'roles' => ['administrator']
             ]);
 
-        $button->setFirst();
+        $settingsButton->setFirst();
 
         $notesButton = $menu->createButton([
             'name' => 'notesManager',
@@ -24,7 +24,7 @@ trait NotesMenuTrait
             'text' => 'notes::notes.manage'
         ]);
 
-        $button->addChild($notesButton);
+        $settingsButton->addChild($notesButton);
 
         $notesButton->addChild(
             $menu->createButton([
@@ -61,6 +61,26 @@ trait NotesMenuTrait
                 'text' => 'notes::notes.manageTypes'
             ])
         );
+
+        $tasksButton = $menu->createButton([
+            'name' => 'tasksManager',
+            'icon' => 'message',
+            'text' => 'notes::tasks.manage'
+        ]);
+
+        $settingsButton->addChild($tasksButton);
+
+        $tasksButton->addChild(
+            $menu->createButton([
+                'name' => 'tasks.index',
+                'icon' => 'list',
+                // 'href' => static::route('notes.unseen'),
+                'href' => route('notesmanagertasks.index'),
+                'text' => 'notes::tasks.list'
+            ])
+        );
+
+
 
     }
 }
