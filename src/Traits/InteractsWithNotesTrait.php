@@ -7,6 +7,9 @@ use IlBronza\Notes\Facades\Notes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
+use function config;
+use function route;
+
 trait InteractsWithNotesTrait
 {
     public function getNoteClass()
@@ -90,4 +93,10 @@ trait InteractsWithNotesTrait
         return $this->getAddNotesButton()
                     ->render();
     }
+
+	public function getNotesListUrl()
+	{
+		return  app('notes')::getRoutedModel($this, 'notes.addBy');
+	}
+
 }

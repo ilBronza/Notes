@@ -15,6 +15,12 @@ class TaskCreateStoreFieldsetsParameters extends FieldsetParametersFile
 					'title' => ['text' => 'string|required|max:255'],
 					'notes' => ['textarea' => 'string|nullable'],
 					'status' => ['select' => 'string|nullable'],
+					'assignee_user_id' => [
+						'type' => 'select',
+						'multiple' => false,
+						'rules' => 'string|nullable|exists:users,id',
+						'relation' => 'assignee'
+					],
 				],
 				'width' => ['1-3@l', '1-2@m']
 			],

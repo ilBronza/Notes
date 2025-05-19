@@ -1,5 +1,6 @@
 <?php
 
+use IlBronza\AccountManager\Models\Role;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -34,6 +35,13 @@ return new class extends Migration
             $table->timestamps();
 			$table->softDeletes();
         });
+
+
+        $role = Role::gpc()::make();
+
+        $role->name = 'taskAssignee';
+        $role->guard_name = 'web';
+        $role->save();
     }
 
     /**

@@ -19,7 +19,7 @@ class TaskIndexController extends TaskCRUD
 
 	public function getIndexElements()
 	{
-		return $this->getModelClass()::all();
+		return $this->getModelClass()::notClosed()->get();
 	}
 
 }

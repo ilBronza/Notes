@@ -6,8 +6,6 @@ use IlBronza\Notes\Http\ParametersFiles\Fieldsets\TaskCreateStoreFieldsetsParame
 use IlBronza\Notes\Models\Note;
 use IlBronza\Notes\Models\Notetype;
 use IlBronza\Notes\Models\Task;
-use IlBronza\Vehicles\Http\Controllers\Providers\Fieldsets\VehicleCreateStoreFieldsetsParameters;
-use IlBronza\Vehicles\Http\Controllers\Providers\Fieldsets\VehicleShowFieldsetsParameters;
 
 return [
     'routePrefix' => 'notesmanager',
@@ -24,11 +22,11 @@ return [
             ]
         ],
 	    'task' => [
+			'enabled' => true,
 			'class' => Task::class,
 		    'table' => 'notes__tasks',
 		    'parametersFiles' => [
 			    'create' => TaskCreateStoreFieldsetsParameters::class,
-//			    'show' => VehicleShowFieldsetsParameters::class
 		    ],
 		    'fieldsGroupsFiles' => [
 			    'index' => TaskFieldsGroupParametersFile::class

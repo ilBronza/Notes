@@ -4,6 +4,7 @@ namespace IlBronza\Notes;
 
 use IlBronza\CRUD\Traits\IlBronzaPackages\IlBronzaServiceProviderPackagesTrait;
 use IlBronza\Notes\Models\Note;
+use IlBronza\Notes\Models\Task;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider;
 
@@ -18,7 +19,8 @@ class NotesServiceProvider extends ServiceProvider
 	public function boot() : void
 	{
 		Relation::morphMap([
-			'Note' => Note::getProjectClassName()
+			'Note' => Note::getProjectClassName(),
+			'Task' => Task::getProjectClassName()
 		]);
 
 		$this->loadTranslationsFrom(__DIR__ . '/../resources/lang', 'notes');

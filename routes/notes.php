@@ -5,7 +5,7 @@ use IlBronza\Notes\Http\Controllers\CrudNoteByModelController;
 use IlBronza\Notes\Http\Controllers\CrudNoteController;
 use IlBronza\Notes\Http\Controllers\CrudNotetypeController;
 use IlBronza\Notes\Http\Controllers\CrudUnseenNoteController;
-
+use IlBronza\Notes\Http\Controllers\Tasks\ClosedTaskIndexController;
 use IlBronza\Notes\Http\Controllers\Tasks\TaskCreateStoreController;
 use IlBronza\Notes\Http\Controllers\Tasks\TaskDestroyController;
 use IlBronza\Notes\Http\Controllers\Tasks\TaskEditUpdateController;
@@ -51,6 +51,7 @@ Route::group([
 ],
 	function()
 	{
+		Route::get('completed', [ClosedTaskIndexController::class, 'index'])->name('closed');
 		Route::get('', [TaskIndexController::class, 'index'])->name('index');
 		Route::post('', [TaskCreateStoreController::class, 'store'])->name('store');
 		Route::get('create', [TaskCreateStoreController::class, 'create'])->name('create');
