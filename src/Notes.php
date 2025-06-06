@@ -39,6 +39,9 @@ class Notes implements RoutedObjectInterface
 
 		$button->renderIFrame();
 
+		$button->setPrimary();
+		$button->setSmall();
+
 		return $button;
 	}
 

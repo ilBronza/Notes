@@ -33,12 +33,12 @@
 <table class="uk-width-1-1 uk-table ib-notes-table {{ $key }}">
 	@foreach($notes as $note)
 	<tr>
-		<td style="width: 47px;" class="uk-visible@l">
+		<td style="width: 47px;" class="uk-visible@l ib-notes-edit">
 			<a href="{{ $note->getEditUrl() }}" uk-icon="file-edit"></a>
 		</td>
 		<td class="uk-visible@l ib-notes-type">{{ $note->getType()?->getName() }}</td>
 		<td class="uk-visible@l ib-notes-username"><strong>{{ $note->getUserName() }} - {{ $note->getLastCompilationDate() }}: </strong></td>
-		<td>{{ $note->getText() }}</td>
+		<td class="ib-notes-note">{{ $note->getText() }}</td>
 		<td class="ib-notes-images">
 			<ul class="uk-list">
 			@foreach($note->getImages() as $file)
