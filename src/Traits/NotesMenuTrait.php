@@ -96,7 +96,7 @@ trait NotesMenuTrait
             ])
         );
 
-		if(config('notes.models.task.enabled'))
+		if(config('notes.models.task.enabled', false))
 			$this->tasksMenu($menu, $settingsButton);
 
     }

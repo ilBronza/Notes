@@ -22,7 +22,7 @@ return [
             ]
         ],
 	    'task' => [
-			'enabled' => true,
+			'enabled' => false,
 			'class' => Task::class,
 		    'table' => 'notes__tasks',
 		    'parametersFiles' => [

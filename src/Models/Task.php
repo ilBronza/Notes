@@ -41,7 +41,7 @@ class Task extends BaseModel implements HasMedia
 
 	public function scopeNotClosed($query)
 	{
-		$query->where('status', '!=', 'closed');
+		$query->where('status', '!=', 'closed')->orWhereNull('status');
 	}
 
 	public function assignee()
