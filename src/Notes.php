@@ -32,7 +32,7 @@ class Notes implements RoutedObjectInterface
 	static function getAddNotesForModelButton(Model $model)
 	{
 		$button = Button::create([
-			'href' => static::getRoutedModel($model, 'notes.add'),
+			'href' => app('notes')->getRoutedModel($model, 'notes.add'),
 			'text' => trans('notes::notes.addNote'),
 			'icon' => 'plus'
 		]);
@@ -168,7 +168,7 @@ class Notes implements RoutedObjectInterface
 				'type' => __('notes.crudModels' . $model->getCamelcaseClassBasename()),
 				'name' => $model->getName()
 			]),
-			'url' => static::getRoutedModel($model, 'notes.by')
+			'url' => app('notes')->getRoutedModel($model, 'notes.by')
 		]);
 
 		$fetcher->addButton(
@@ -184,7 +184,7 @@ class Notes implements RoutedObjectInterface
 			return null;
 
 		$fetcher = new Fetcher([
-			'url' => static::getRoutedModel($model, 'notes.by')
+			'url' => app('notes')->getRoutedModel($model, 'notes.by')
 		]);
 
 		$fetcher->addButton(

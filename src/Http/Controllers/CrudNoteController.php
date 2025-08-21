@@ -85,7 +85,6 @@ class CrudNoteController extends CRUD
             'translationPrefix' => 'notes::fields',
             'fields' => 
             [
-                'imported' => 'boolean',
                 'created_at' => [
                     'type' => 'dates.datetime',
                     'order' => [
@@ -93,19 +92,14 @@ class CrudNoteController extends CRUD
                         'type' => 'DESC'
                     ]
                 ],
-                'mySelfEdit' => 'links.edit',
                 'mySelfSee' => 'links.see',
                 'user_id' => 'users.name',
                 'noteable_type' => 'utilities.removeNamespace',
-                'mySelfSeeElement.noteable' => 'links.see',
-                'mySelfName.noteable' => '_fn_getName',
-                // 'mySelfClient.noteable.client.name' => 'flat',
                 'notes' => [
                     'type' => 'flat',
                     'width' => '650px'
                 ],
                 'slack' => 'boolean',
-                'create_notification' => 'boolean',
                 'type_slug' => 'flat',
                 'mySelfArchive' => 'links.archive',
                 'mySelfDelete' => 'links.delete'

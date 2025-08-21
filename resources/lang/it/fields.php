@@ -19,4 +19,6 @@ return [
 	'mySelfName.noteable' => 'Elemento',
 	'mySelfClient.noteable.client.name' => 'Azienda',
 
+	'mySelfArchive' => 'Archivia',
+
 ];

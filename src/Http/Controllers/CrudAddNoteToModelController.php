@@ -22,10 +22,7 @@ class CrudAddNoteToModelController extends CrudNoteController
     {
         $this->setReturnUrlToPrevious();
 
-        if(! $morphedClass = Relation::getMorphedModel($class))
-            $morphedClass = $class;
-
-        $model = $morphedClass::find($key);
+		$model = ModelFinderHelper::getByClassKey($class, $key);
 
         $subject = $model->getNotesSubject();
         $elements = $model->getNotesRelationships();
