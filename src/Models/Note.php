@@ -5,6 +5,7 @@ namespace IlBronza\Notes\Models;
 use App\Models\User;
 use Auth;
 use Carbon\Carbon;
+use IlBronza\Buttons\Button;
 use IlBronza\CRUD\Models\BaseModel;
 use IlBronza\CRUD\Traits\Media\InteractsWithMedia;
 use IlBronza\CRUD\Traits\Model\CRUDArchiverTrait;
@@ -15,6 +16,7 @@ use IlBronza\Notes\Notifications\NoteNotification;
 use IlBronza\Notes\Traits\Models\NoteSettersGettersTrait;
 use IlBronza\Notifications\Notification as IbNotification;
 use IlBronza\Notifications\Notifications\SlackNotification;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Support\Facades\Notification;
@@ -274,4 +276,10 @@ class Note extends BaseModel implements HasMedia
 	{
 		return $this->updated_at->format(__('crud::dates.humanShort'));
 	}
+
+	public function getCreateByPolimorphicRelatedButton(Model $related) : Button
+	{
+		return app('notes')::getAddNotesForModelButton($related);
+	}
+
 }
