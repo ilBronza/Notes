@@ -13,7 +13,7 @@ class TaskCreateStoreFieldsetsParameters extends FieldsetParametersFile
 				'translationPrefix' => 'notes::fields',
 				'fields' => [
 					'title' => ['text' => 'string|required|max:255'],
-					'notes' => ['textarea' => 'string|nullable'],
+					'description' => ['textarea' => 'string|nullable'],
 					'status' => ['select' => 'string|nullable'],
 					'assignee_user_id' => [
 						'type' => 'select',
