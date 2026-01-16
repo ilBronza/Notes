@@ -96,7 +96,7 @@ trait InteractsWithNotesTrait
 
 	public function getNotesListUrl()
 	{
-		return  app('notes')::getRoutedModel($this, 'notes.addBy');
+		return  app('notes')->getRoutedModel($this, 'notes.addBy');
 	}
 
 }

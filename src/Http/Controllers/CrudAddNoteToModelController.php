@@ -2,6 +2,7 @@
 
 namespace IlBronza\Notes\Http\Controllers;
 
+use IlBronza\CRUD\Helpers\ModelHelpers\ModelFinderHelper;
 use IlBronza\Notes\Facades\Notes;
 use IlBronza\Notes\Http\ParametersFiles\NoteParameters;
 use Illuminate\Database\Eloquent\Relations\Relation;

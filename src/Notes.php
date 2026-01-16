@@ -5,6 +5,7 @@ namespace IlBronza\Notes;
 use IlBronza\Buttons\Button;
 use IlBronza\CRUD\Providers\RouterProvider\RoutedObjectInterface;
 use IlBronza\CRUD\Traits\IlBronzaPackages\IlBronzaPackagesTrait;
+use IlBronza\Notes\Helpers\NotesDisplayerHelper;
 use IlBronza\Notes\Models\Notetype;
 use IlBronza\Notes\Traits\NotesMenuTrait;
 use IlBronza\Notes\Traits\NotesRoutingTrait;
@@ -12,7 +13,6 @@ use IlBronza\UikitTemplate\Fetcher;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
-
 use function __;
 
 class Notes implements RoutedObjectInterface
@@ -223,5 +223,15 @@ class Notes implements RoutedObjectInterface
 			$model->getKey(),
 			Str::slug($key)
 		]);
+	}
+
+	static function display(Collection $notes)
+	{
+		return NotesDisplayerHelper::display($notes);
+	}
+
+	static function displayByElement(Model $element)
+	{
+		return NotesDisplayerHelper::displayByElement($element);
 	}
 }

@@ -14,6 +14,7 @@ class TaskIndexController extends TaskCRUD
 
 	public function getIndexFieldsArray()
 	{
+		//TaskFieldsGroupParametersFile
 		return config('notes.models.task.fieldsGroupsFiles.index')::getFieldsGroup();
 	}
 

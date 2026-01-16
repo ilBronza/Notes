@@ -16,10 +16,16 @@ class TaskFieldsGroupParametersFile extends FieldsetParametersFile
 
 					'mySelfEdit' => 'links.edit',
 
-					'created_at' => 'dates.datetime',
+					'created_at' => [
+						'type' => 'dates.datetime',
+						'order' => [
+							'type' => 'DESC',
+							'priority' => 100
+						]
+					],
 					'user_id' => 'users.name',
 					'title' => 'flat',
-					'notes' => 'text',
+					'description' => 'text',
 					'start_date' => 'editor.dates.datetime',
 					'end_date' => 'editor.dates.datetime',
 					'status' => [
@@ -47,6 +53,14 @@ class TaskFieldsGroupParametersFile extends FieldsetParametersFile
 					],
 					'minutes' => 'editor.numeric',
 					'commit' => 'editor.text',
+
+					'updated_at' => [
+						'type' => 'dates.datetime',
+						'order' => [
+							'type' => 'DESC',
+							'priority' => 100
+						]
+					],
 
 					'mySelfDelete' => 'links.delete'
 				]

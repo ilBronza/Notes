@@ -154,6 +154,11 @@ class Note extends BaseModel implements HasMedia
 		return route(config('notes.routePrefix') . 'notes.archiveBulk');
 	}
 
+	public function getNoteable() : ? Model
+	{
+		return $this->noteable;
+	}
+
 	public function noteable() : MorphTo
 	{
 		return $this->morphTo();

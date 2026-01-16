@@ -16,7 +16,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
 
 	        $table->string('title')->nullable();
-	        $table->text('notes')->nullable();
+	        $table->text('description')->nullable();
 
 			$table->unsignedBigInteger('user_id')->nullable();
 			$table->foreign('user_id')->references('id')->on('users');
