@@ -21,4 +21,8 @@ return [
 
 	'mySelfArchive' => 'Archivia',
 
+	'mySelfSeen' => 'Vedi Me Stesso',
+    'media' => 'Contenuti',
+    'slug' => 'Sigla',
+	'mySelfPrimary' => 'Nota Principale Personale',
 ];

@@ -10,5 +10,6 @@ return [
 	'archived' => 'Note archiviate',
 	'unseen' => 'Note non viste',
 	'notetype' => 'Tipologia nota',
-	'anyNoteIsPresent' => 'Nessuna nota presente'
+	'anyNoteIsPresent' => 'Nessuna nota presente',
+	
 ];
