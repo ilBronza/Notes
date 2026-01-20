@@ -21,9 +21,11 @@ class CrudAddNoteToModelController extends CrudNoteController
 
     public function addBy(Request $request, string $class, string $key)
     {
-        $this->setReturnUrlToPrevious();
-
 		$model = ModelFinderHelper::getByClassKey($class, $key);
+
+        $this->setModel($model);
+
+        $this->setReturnUrlToPrevious();
 
         $subject = $model->getNotesSubject();
         $elements = $model->getNotesRelationships();

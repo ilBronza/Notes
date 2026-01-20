@@ -12,9 +12,15 @@ class NotesProviderHelper
 		$result = $element->getNotes();
 
 		foreach($element->getNotesRelationships() as $element)
-			$result = $result->merge(
-				$element->getNotes()
-			);
+			if($element instanceof Collection)
+				foreach($element as $_element)
+					$result = $result->merge(
+						$_element->getNotes()
+					);
+			else
+				$result = $result->merge(
+					$element->getNotes()
+				);
 
 		return $result;
 	}
