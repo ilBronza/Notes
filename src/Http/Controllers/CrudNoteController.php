@@ -30,7 +30,7 @@ class CrudNoteController extends CRUD
 
     public $returnBack = true;
 
-    public function getReturnUrl() : ? string
+    public function getReturnUrl(string $classKey = null) : ?string
     {
         if($url = session("ilbronzanoteshttpcontrollerscrudaddnotetomodelcontroller", null))
         {

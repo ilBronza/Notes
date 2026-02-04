@@ -15,7 +15,7 @@ class TaskIndexController extends TaskCRUD
 	public function getIndexFieldsArray()
 	{
 		//TaskFieldsGroupParametersFile
-		return config('notes.models.task.fieldsGroupsFiles.index')::getFieldsGroup();
+		return config('notes.models.task.fieldsGroupsFiles.index')::getTracedFieldsGroup();
 	}
 
 	public function getIndexElements()
