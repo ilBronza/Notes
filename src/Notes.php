@@ -102,6 +102,9 @@ class Notes implements RoutedObjectInterface
 			{
 				foreach ($elements as $element)
 				{
+					if(! $element)
+						continue;
+
 					if(! $element->relationLoaded('notes'))
 						$element->load('notes.noteable');
 

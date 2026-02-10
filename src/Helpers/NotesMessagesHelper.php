@@ -13,7 +13,8 @@ class NotesMessagesHelper
 		$notes = NotesProviderHelper::getByElement($element);
 
 		foreach($notes as $note)
-			Ukn::w($note->notes);
+			if(! is_null($note->notes))
+				Ukn::w($note->notes);
 
 		return $notes;
 	}

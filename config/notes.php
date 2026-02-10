@@ -13,6 +13,10 @@ return [
 
 	'enabled' => true,
 
+    'datatableFieldWidths' => [
+        'datatableFieldNotesList' => '2em'
+    ],
+
     'models' => [
         'note' => [
             'class' => Note::class,

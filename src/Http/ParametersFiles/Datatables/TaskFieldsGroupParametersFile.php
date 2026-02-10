@@ -2,9 +2,10 @@
 
 namespace IlBronza\Notes\Http\ParametersFiles\Datatables;
 
+use IlBronza\Datatables\Providers\FieldsGroupParametersFile;
 use IlBronza\Form\Helpers\FieldsetsProvider\FieldsetParametersFile;
 
-class TaskFieldsGroupParametersFile extends FieldsetParametersFile
+class TaskFieldsGroupParametersFile extends FieldsGroupParametersFile
 {
 	static function getFieldsGroup() : array
 	{
