@@ -11,6 +11,15 @@ return [
     'routePrefix' => 'notesmanager',
 	'routePrefixTasks' => 'notesmanagertasks.',
 
+    'defaultRoles' => [
+        'superadmin',
+        'administrator',
+        'notes',
+    ],
+
+    'routeRoles' => [
+    ],
+
 	'enabled' => true,
 
     'datatableFieldWidths' => [

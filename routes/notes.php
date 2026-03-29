@@ -13,7 +13,7 @@ use IlBronza\Notes\Http\Controllers\Tasks\TaskIndexController;
 use IlBronza\Vehicles\Vehicles;
 
 Route::group([
-	'middleware' => ['web', 'auth'],
+	'middleware' => ['web', 'auth', 'notes.roles'],
 	'prefix' => 'notes-management',
 	'as' => config('notes.routePrefix'),
 	'routeTranslationPrefix' => 'notes::routes.'	
@@ -44,7 +44,7 @@ Route::group([
 
 
 Route::group([
-	'middleware' => ['web', 'auth'],
+	'middleware' => ['web', 'auth', 'notes.roles'],
 	'prefix' => 'tasks-management',
 	'as' => config('notes.routePrefixTasks'),
 	'routeTranslationPrefix' => 'notes::routes.'
