@@ -11,16 +11,17 @@ class NotesProviderHelper
 	{
 		$result = $element->getNotes();
 
-		foreach($element->getNotesRelationships() as $element)
-			if($element instanceof Collection)
-				foreach($element as $_element)
+		foreach($element->getNotesRelationships() as $__element)
+			if($__element instanceof Collection)
+				foreach($__element as $_element)
 					$result = $result->merge(
 						$_element->getNotes()
 					);
 			else
-				$result = $result->merge(
-					$element->getNotes()
-				);
+				if($__element)
+					$result = $result->merge(
+						$__element->getNotes()
+					);
 
 		return $result;
 	}
