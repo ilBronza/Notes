@@ -26,7 +26,7 @@ class Task extends BaseModel implements HasMedia
 	static $modelConfigPrefix = 'task';
 	public ?string $translationFolderPrefix = 'notes';
 	protected $keyType = 'string';
-	protected $deletingRelationships = ['media'];
+	static $deletingRelationships = ['media'];
 
 	protected $casts = [
 		'start_date' => 'datetime',

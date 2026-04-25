@@ -43,7 +43,7 @@ class Note extends BaseModel implements HasMedia
 
 	use NoteSettersGettersTrait;
 
-	protected $deletingRelationships = ['media'];
+	static $deletingRelationships = ['media'];
 
 	protected $fillable = [
 		'noteable_type',
