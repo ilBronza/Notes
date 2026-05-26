@@ -262,6 +262,14 @@ class Note extends BaseModel implements HasMedia
 		return __('notes::notes.unknownUser');
 	}
 
+	public function getShortUserName() : string
+	{
+		if ($user = $this->getUser())
+			return $user->getShortName();
+
+		return __('notes::notes.unknownUser');
+	}
+
 	public function getUser() : ?User
 	{
 		if (! $userKey = $this->getUserId())

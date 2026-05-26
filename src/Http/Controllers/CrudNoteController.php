@@ -25,6 +25,8 @@ class CrudNoteController extends CRUD
 
     public $avoidCreateButton = true;
 
+    public $avoidBackToList = true;
+
     public $saveAndNew = false;
     public $saveAndRefresh = false;
 
