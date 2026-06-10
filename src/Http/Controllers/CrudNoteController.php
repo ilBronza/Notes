@@ -4,8 +4,10 @@ namespace IlBronza\Notes\Http\Controllers;
 
 use IlBronza\Buttons\Button;
 use IlBronza\CRUD\CRUD;
+use IlBronza\CRUD\Models\Media;
 use IlBronza\CRUD\Traits\CRUDArchiveTrait;
 use IlBronza\CRUD\Traits\CRUDCreateStoreTrait;
+use IlBronza\CRUD\Traits\CRUDDeleteMediaTrait;
 use IlBronza\CRUD\Traits\CRUDDeleteTrait;
 use IlBronza\CRUD\Traits\CRUDDestroyTrait;
 use IlBronza\CRUD\Traits\CRUDEditUpdateTrait;
@@ -147,6 +149,8 @@ class CrudNoteController extends CRUD
     use CRUDPlainIndexTrait;
     use CRUDIndexTrait;
     use CRUDEditUpdateTrait;
+    use CRUDDeleteMediaTrait;
+
 
     use CRUDRelationshipTrait;
 
@@ -202,6 +206,7 @@ class CrudNoteController extends CRUD
         'create',
         'store',
         'destroy',
+        'deleteMedia',
         'archive',
         'archiveBulk',
         'archived'
@@ -283,6 +288,11 @@ class CrudNoteController extends CRUD
         $note = $this->getModelClass()::withArchived()->find($note);
 
         return $this->_destroy($note);
+    }
+
+    public function deleteMedia($note, Media $media)
+    {
+        return $this->_deleteMedia($note, $media);
     }
 
     /**

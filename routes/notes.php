@@ -31,7 +31,7 @@ Route::group([
 
 		Route::post('notes/{note}/seen', [CrudUnseenNoteController::class, 'seen'])->name('notes.seen');
 
-		Route::get('delete-media/{note}/{media}', [CrudNoteController::class, 'delete'])->name('notes.deleteMedia');
+		Route::match(['get', 'post', 'patch', 'delete'], 'delete-media/{note}/{media}', [CrudNoteController::class, 'deleteMedia'])->name('notes.deleteMedia');
 
 		Route::get('notes-by/{class}/{key}', [CrudNoteByModelController::class, 'notesBy'])->name('notes.by');
 
