@@ -22,7 +22,6 @@ return [
 		'seeBulk' => 'Viste in blocco',
 		'unseen' => 'Note non viste',
 	],
-
 	'notesmanagernotetypes' => [
 		'index' => 'Indice tipi note',
 		'store' => 'Crea nota',
@@ -34,5 +33,12 @@ return [
 		'destroy' => 'Elimina nota',
 		'archive' => 'Archivia nota',
 		'edit' => 'Modifica nota',
-	]
+	],
+	'notesmanagertasksclosed' => 'Closed — task',
+	'notesmanagertaskscreate' => 'Crea task',
+	'notesmanagertasksdestroy' => 'Elimina task',
+	'notesmanagertasksedit' => 'Modifica task :model',
+	'notesmanagertasksindex' => 'Lista task',
+	'notesmanagertasksstore' => 'Salva task',
+	'notesmanagertasksupdate' => 'Aggiorna task',
 ];
