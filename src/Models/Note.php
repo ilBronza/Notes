@@ -169,6 +169,11 @@ class Note extends BaseModel implements HasMedia
 		return $this->belongsTo(Notetype::class);
 	}
 
+	public function user() : BelongsTo
+	{
+		return $this->belongsTo(config('auth.providers.users.model'), 'user_id');
+	}
+
 	public function getTypeName()
 	{
 		return $this->getType()?->getName();

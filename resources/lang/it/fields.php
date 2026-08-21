@@ -25,4 +25,12 @@ return [
     'media' => 'Contenuti',
     'slug' => 'Sigla',
 	'mySelfPrimary' => 'Nota Principale Personale',
+
+	'title' => 'Titolo',
+	'status' => 'Stato',
+	'assignee_user_id' => 'Assegnatario',
+	'start_date' => 'Inizio',
+	'end_date' => 'Fine',
+	'minutes' => 'Minuti',
+	'commit' => 'Commit',
 ];
