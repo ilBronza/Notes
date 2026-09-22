@@ -11,5 +11,14 @@ return [
 	'unseen' => 'Note non viste',
 	'notetype' => 'Tipologia nota',
 	'anyNoteIsPresent' => 'Nessuna nota presente',
-	
+
+  'unknownUser' => 'Utente sconosciuto',
+  'cardTitleEdit' => 'Modifica nota',
+  'cardIntroEdit' => 'Modifica i dati della nota',
+  'cardTitleShow' => 'Dettagli nota',
+  'cardIntroShow' => 'Informazioni sulla nota',
+  'notetypes' => 'Tipi di nota',
+  'note' => 'Nota',
+  'task' => 'Attività',
+  'titles.show' => 'Dettagli :element',
 ];

@@ -33,4 +33,11 @@ return [
 	'end_date' => 'Fine',
 	'minutes' => 'Minuti',
 	'commit' => 'Commit',
+
+  'general' => 'Generale',
+  'package' => 'Gruppo parametri nota',
+  'tracking' => 'Tracciamento',
+  'mySelfNotes' => 'Note',
+  'update_at' => 'Aggiornato il',
+  'updated_at' => 'Aggiornato il',
 ];
