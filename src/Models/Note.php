@@ -239,11 +239,6 @@ class Note extends BaseModel implements HasMedia
 		return '<form method="POST" onSubmit="return confirm(\'Sei sicuro?\');" action="' . $this->getArchiveUrl() . '">' . csrf_field() . ' ' . method_field('PUT') . '<button class="uk-button uk-button-small" type="submit"><i class="fa-solid fa-archive"></i></button></form>';
 	}
 
-	public function getArchiveUrl(array $data = [])
-	{
-		return route(config('notes.routePrefix') . 'notes.archive', [$this]);
-	}
-
 	public function seen()
 	{
 		$this->seen_at = Carbon::now();
