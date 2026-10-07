@@ -21,4 +21,6 @@ return [
   'note' => 'Nota',
   'task' => 'Attività',
   'titles.show' => 'Dettagli :element',
+    'cardTitleCreate' => 'Crea nota',
+    'cardIntroCreate' => 'Compila i dati e salva per completare la creazione.',
 ];
