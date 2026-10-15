@@ -3,6 +3,7 @@
 namespace IlBronza\Notes\Models;
 
 use App\Models\User;
+use IlBronza\AccountManager\Models\User as AccountUser;
 use Auth;
 use Carbon\Carbon;
 use IlBronza\Buttons\Button;
@@ -19,6 +20,7 @@ use IlBronza\Notifications\Notifications\SlackNotification;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\Notification;
 use Spatie\MediaLibrary\HasMedia;
 
@@ -49,6 +51,45 @@ class Note extends BaseModel implements HasMedia
 		'noteable_type',
 		'noteable_id',
 	];
+
+	protected function belongsToTaskConversation() : bool
+	{
+		$class = Relation::getMorphedModel($this->noteable_type) ?? $this->noteable_type;
+
+		return $this->noteable_type === 'Task' || ($class && is_a($class, Task::class, true));
+	}
+
+	public function userCanSee(?AccountUser $user = null)
+	{
+		$user = $user ?? Auth::user();
+		if (!$this->belongsToTaskConversation())
+			return parent::userCanSee($user);
+
+		$task = $this->noteable;
+		if (!$task || !$task->userCanSee($user))
+			return false;
+
+		return $task::isTaskStaff($user)
+			? parent::userCanSee($user) : $this->conversation_visibility === 'shared';
+	}
+
+	public function userCanUpdate(?AccountUser $user = null)
+	{
+		$user = $user ?? Auth::user();
+		if (!$this->belongsToTaskConversation())
+			return parent::userCanUpdate($user);
+
+		return $this->noteable && $this->noteable->userCanUpdate($user) && parent::userCanUpdate($user);
+	}
+
+	public function userCanDelete(?AccountUser $user = null)
+	{
+		$user = $user ?? Auth::user();
+		if (!$this->belongsToTaskConversation())
+			return parent::userCanDelete($user);
+
+		return $this->noteable && $this->noteable->userCanUpdate($user) && parent::userCanDelete($user);
+	}
 
 	// public function getTable() : string
 	// {

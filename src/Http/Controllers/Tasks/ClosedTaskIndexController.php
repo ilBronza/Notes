@@ -2,14 +2,13 @@
 
 namespace IlBronza\Notes\Http\Controllers\Tasks;
 
-use IlBronza\CRUD\Traits\CRUDIndexTrait;
-use IlBronza\CRUD\Traits\CRUDPlainIndexTrait;
-
 class ClosedTaskIndexController extends TaskIndexController
 {
+	protected bool $showClosed = true;
+
 	public function getIndexElements()
 	{
-		return $this->getModelClass()::closed()->get();
+		return $this->getModelClass()::closed()->latest('updated_at')->get();
 	}
 
 }

@@ -27,6 +27,12 @@ return [
 
 	'enabled' => true,
 
+	'conversation' => [
+		'disk' => 'local',
+		'participantsTable' => 'notes__task_participants',
+		// Optional staffRoles override; defaults to notes.defaultRoles.
+	],
+
     'datatableFieldWidths' => [
         'datatableFieldNotesList' => '2em'
     ],

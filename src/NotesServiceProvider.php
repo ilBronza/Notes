@@ -4,6 +4,7 @@ namespace IlBronza\Notes;
 
 use IlBronza\CRUD\Traits\IlBronzaPackages\IlBronzaServiceProviderPackagesTrait;
 use IlBronza\Notes\Http\Middleware\NotesMiddlewareRolesPermissions;
+use IlBronza\Notes\Http\Middleware\TasksMiddlewareAccess;
 use IlBronza\Notes\Models\Note;
 use IlBronza\Notes\Models\Task;
 use Illuminate\Database\Eloquent\Relations\Relation;
@@ -30,6 +31,7 @@ class NotesServiceProvider extends ServiceProvider
 		$this->loadRoutesFrom(__DIR__ . '/../routes/notes.php');
 
 		$this->app['router']->aliasMiddleware('notes.roles', NotesMiddlewareRolesPermissions::class);
+		$this->app['router']->aliasMiddleware('notes.tasks', TasksMiddlewareAccess::class);
 
 		// Publishing is only necessary when using the CLI.
 		if ($this->app->runningInConsole())

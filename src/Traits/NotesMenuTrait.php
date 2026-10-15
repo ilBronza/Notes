@@ -43,6 +43,17 @@ trait NotesMenuTrait
         if(! $menu = app('menu'))
             return;
 
+		$taskClass = config('notes.models.task.class');
+		if (config('notes.models.task.enabled', false) && auth()->check() && !$taskClass::isTaskStaff(auth()->user()))
+		{
+			$menu->createButton([
+				'name' => 'tasks.myTasks',
+				'icon' => 'comments',
+				'href' => route(config('notes.routePrefixTasks') . 'index'),
+				'text' => 'notes::tasks.myTasks',
+			]);
+		}
+
         $settingsButton = $menu->provideButton([
                 'text' => 'menu::menu.settings',
                 'name' => 'settings',

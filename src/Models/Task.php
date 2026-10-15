@@ -20,10 +20,9 @@ class Task extends BaseModel implements HasMedia
 	use CRUDUseUuidTrait;
 	use PackagedModelsTrait;
 
-	use CRUDCreatedByUserTrait;
-
 	static $packageConfigPrefix = 'notes';
 	static $modelConfigPrefix = 'task';
+	static $nameField = 'title';
 	public ?string $translationFolderPrefix = 'notes';
 	protected $keyType = 'string';
 	static $deletingRelationships = ['media'];
@@ -41,7 +40,65 @@ class Task extends BaseModel implements HasMedia
 
 	public function scopeNotClosed($query)
 	{
-		$query->where('status', '!=', 'closed')->orWhereNull('status');
+		return $query->where(function ($query) {
+			$query->where('status', '!=', 'closed')->orWhereNull('status');
+		});
+	}
+
+	public static function getWorkflowStatuses() : array
+	{
+		return [
+			'open' => __('notes::tasks.statuses.open'),
+			'in_progress' => __('notes::tasks.statuses.in_progress'),
+			'not_manageable' => __('notes::tasks.statuses.not_manageable'),
+			'closed' => __('notes::tasks.statuses.closed'),
+		];
+	}
+
+	public function userCanComment($user = null) : bool
+	{
+		return (bool) $this->userCanSee($user);
+	}
+
+	public static function isTaskStaff($user = null) : bool
+	{
+		$user = $user ?? auth()->user();
+		$roles = config('notes.conversation.staffRoles', config('notes.defaultRoles', []));
+
+		return $user && $user->hasAnyRole(is_array($roles) ? $roles : explode('|', $roles));
+	}
+
+	public function participants()
+	{
+		return $this->belongsToMany(
+			config('auth.providers.users.model'), config('notes.conversation.participantsTable'), 'task_id', 'user_id'
+		)->withTimestamps();
+	}
+
+	public function userCanSee(?User $user = null)
+	{
+		$user = $user ?? auth()->user();
+		if (!$user)
+			return false;
+
+		if (static::isTaskStaff($user))
+			return parent::userCanSee($user);
+
+		return $this->participants()->whereKey($user->getKey())->exists();
+	}
+
+	public function userCanUpdate(?User $user = null)
+	{
+		$user = $user ?? auth()->user();
+
+		return static::isTaskStaff($user) && parent::userCanUpdate($user);
+	}
+
+	public function userCanDelete(?User $user = null)
+	{
+		$user = $user ?? auth()->user();
+
+		return static::isTaskStaff($user) && parent::userCanDelete($user);
 	}
 
 	public function assignee()
