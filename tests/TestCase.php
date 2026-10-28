@@ -17,7 +17,6 @@ use Orchestra\Testbench\TestCase as BaseTestCase;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\PermissionServiceProvider;
 use IlBronza\Notes\NotesServiceProvider;
-use IlBronza\Notes\Tests\Fixtures\WorkspaceTask;
 use Spatie\MediaLibrary\MediaLibraryServiceProvider;
 
 abstract class TestCase extends BaseTestCase
@@ -65,8 +64,6 @@ abstract class TestCase extends BaseTestCase
 		$app['config']->set('activitylog.default_auth_driver', null);
 		$app['config']->set('activitylog.enabled', false);
 		$app['config']->set('crud.broadcast.enabled', false);
-		$app['config']->set('notes.models.task.class', WorkspaceTask::class);
-		$app['config']->set('notes.models.task.enabled', true);
 	}
 
 	protected function defineDatabaseMigrations()

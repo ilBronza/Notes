@@ -2,9 +2,6 @@
 
 namespace IlBronza\Notes\Http\Controllers\Tasks;
 
-use IlBronza\Notes\Http\Controllers\CRUDNotesPackageController;
-
-class TaskCRUD extends CRUDNotesPackageController
-{
-	public $configModelClassName = 'task';
-}
+/** @deprecated Install ilbronza/tasks and use \IlBronza\Tasks\Http\Controllers\Tasks\TaskCRUD. */
+if (class_exists(\IlBronza\Tasks\Http\Controllers\Tasks\TaskCRUD::class))
+    class_alias(\IlBronza\Tasks\Http\Controllers\Tasks\TaskCRUD::class, __NAMESPACE__ . '\\TaskCRUD');

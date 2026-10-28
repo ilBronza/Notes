@@ -15,9 +15,6 @@ class NoteSubjectMigrationTest extends TestCase
 		Schema::create('users', function (Blueprint $table) {
 			$table->id();
 		});
-		Schema::create(config('notes.models.task.table'), function (Blueprint $table) {
-			$table->uuid('id')->primary();
-		});
 		Schema::create(config('notes.models.note.table'), function (Blueprint $table) {
 			$table->uuid('id')->primary();
 			$table->nullableMorphs('noteable');

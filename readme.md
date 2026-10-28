@@ -17,33 +17,26 @@ $ composer require ilbronza/notes
 
 ## Usage
 
-### Task conversations
+### Tasks moved to ilbronza/tasks
 
-Run the package migrations with `php artisan migrate` after updating. The task
-workspace is available at `/tasks-management` when tasks are enabled. It includes
-list and board views; opening an activity shows its conversation first.
+Notes 3 contains generic polymorphic notes, attachments and notifications. Task
+management is now provided by [ilbronza/tasks](https://github.com/ilBronza/Tasks).
+Applications using tasks must update both dependencies together:
 
-Team members can expand **Partecipanti** and enter the email of an existing client
-account. That account can then open **Le mie attività**, read shared messages, and
-reply with attachments. Removing a participant revokes access to the activity and
-its conversation downloads. This action does not send an email invitation.
+```bash
+composer require ilbronza/notes:^3.0 ilbronza/tasks:^1.0 --with-all-dependencies
+php artisan optimize:clear
+php artisan migrate
+```
 
-The composer distinguishes **Messaggio condiviso** from **Nota interna**. Existing
-notes remain internal. Clients cannot read internal notes or attachments, change
-task status, or access the advanced table. Task descriptions and tracking fields
-remain visible to staff only. Shared message attachments use authenticated,
-task-scoped download routes.
+The Tasks package preserves existing task classes, published Notes configuration,
+route names, URLs, menus and data. See its
+[upgrade guide](https://github.com/ilBronza/Tasks/blob/main/UPGRADING.md).
+Applications using only generic notes do not need Tasks.
 
-Staff roles default to `notes.defaultRoles`; applications may set
-`notes.conversation.staffRoles` and the existing `notes.routeRoles` settings.
-Keep client roles out of the staff roles. The `Task::userCanSee`, `userCanUpdate`,
-and `userCanComment` methods can be overridden in the configured task model.
-Conversation files use the `local` disk by default; a different private disk can
-be set through `notes.conversation.disk`.
-
-The migration changes polymorphic note keys to strings so UUID tasks can have
-notes alongside models with integer keys. Rolling it back keeps string keys to
-preserve those references.
+Note subjects can implement `IlBronza\Notes\Contracts\AuthorizesNotes` to refine
+view, update and delete permissions without Notes depending on their package.
+Unknown subject classes deny access to their notes.
 
 ## Change log
 
@@ -52,7 +45,7 @@ Please see the [changelog](changelog.md) for more information on what has change
 ## Testing
 
 ``` bash
-$ composer test
+python3 .ibtest/bin/ibtest.py Notes # from the parent packages workspace
 ```
 
 ## Contributing

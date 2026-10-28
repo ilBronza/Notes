@@ -14,6 +14,7 @@ use IlBronza\CRUD\Traits\Model\CRUDCreatedByUserTrait;
 use IlBronza\CRUD\Traits\Model\CRUDUseUuidTrait;
 use IlBronza\CRUD\Traits\Model\PackagedModelsTrait;
 use IlBronza\Notes\Notifications\NoteNotification;
+use IlBronza\Notes\Contracts\AuthorizesNotes;
 use IlBronza\Notes\Traits\Models\NoteSettersGettersTrait;
 use IlBronza\Notifications\Notification as IbNotification;
 use IlBronza\Notifications\Notifications\SlackNotification;
@@ -52,43 +53,41 @@ class Note extends BaseModel implements HasMedia
 		'noteable_id',
 	];
 
-	protected function belongsToTaskConversation() : bool
+	protected function authorizeThroughSubject(string $action, ?AccountUser $user, bool $defaultAllowed): bool
 	{
-		$class = Relation::getMorphedModel($this->noteable_type) ?? $this->noteable_type;
+		if (!$this->noteable_type)
+			return $defaultAllowed;
 
-		return $this->noteable_type === 'Task' || ($class && is_a($class, Task::class, true));
+		$class = Relation::getMorphedModel($this->noteable_type) ?? $this->noteable_type;
+		// Missing subject packages must never expose orphaned private notes.
+		if (!class_exists($class))
+			return false;
+
+		if (!is_a($class, AuthorizesNotes::class, true))
+			return $defaultAllowed;
+
+		return $this->noteable?->{$action}($this, $user, $defaultAllowed) ?? false;
 	}
 
 	public function userCanSee(?AccountUser $user = null)
 	{
 		$user = $user ?? Auth::user();
-		if (!$this->belongsToTaskConversation())
-			return parent::userCanSee($user);
 
-		$task = $this->noteable;
-		if (!$task || !$task->userCanSee($user))
-			return false;
-
-		return $task::isTaskStaff($user)
-			? parent::userCanSee($user) : $this->conversation_visibility === 'shared';
+		return $this->authorizeThroughSubject('userCanSeeNote', $user, (bool) parent::userCanSee($user));
 	}
 
 	public function userCanUpdate(?AccountUser $user = null)
 	{
 		$user = $user ?? Auth::user();
-		if (!$this->belongsToTaskConversation())
-			return parent::userCanUpdate($user);
 
-		return $this->noteable && $this->noteable->userCanUpdate($user) && parent::userCanUpdate($user);
+		return $this->authorizeThroughSubject('userCanUpdateNote', $user, (bool) parent::userCanUpdate($user));
 	}
 
 	public function userCanDelete(?AccountUser $user = null)
 	{
 		$user = $user ?? Auth::user();
-		if (!$this->belongsToTaskConversation())
-			return parent::userCanDelete($user);
 
-		return $this->noteable && $this->noteable->userCanUpdate($user) && parent::userCanDelete($user);
+		return $this->authorizeThroughSubject('userCanDeleteNote', $user, (bool) parent::userCanDelete($user));
 	}
 
 	// public function getTable() : string

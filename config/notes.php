@@ -1,20 +1,15 @@
 <?php
 
 use IlBronza\Notes\Http\Controllers\CrudAddNoteToModelController;
-use IlBronza\Notes\Http\ParametersFiles\Datatables\TaskFieldsGroupParametersFile;
 use IlBronza\Notes\Http\ParametersFiles\Fieldsets\NoteShowFieldsetsParameters;
 use IlBronza\Notes\Http\ParametersFiles\Fieldsets\NotetypeShowFieldsetsParameters;
-use IlBronza\Notes\Http\ParametersFiles\Fieldsets\TaskCreateStoreFieldsetsParameters;
-use IlBronza\Notes\Http\ParametersFiles\Fieldsets\TaskShowFieldsetsParameters;
 use IlBronza\Notes\Http\ParametersFiles\NoteParameters;
 use IlBronza\Notes\Http\ParametersFiles\NotetypeParameters;
 use IlBronza\Notes\Models\Note;
 use IlBronza\Notes\Models\Notetype;
-use IlBronza\Notes\Models\Task;
 
 return [
     'routePrefix' => 'notesmanager',
-	'routePrefixTasks' => 'notesmanagertasks.',
 
     'defaultRoles' => [
         'superadmin',
@@ -26,12 +21,6 @@ return [
     ],
 
 	'enabled' => true,
-
-	'conversation' => [
-		'disk' => 'local',
-		'participantsTable' => 'notes__task_participants',
-		// Optional staffRoles override; defaults to notes.defaultRoles.
-	],
 
     'datatableFieldWidths' => [
         'datatableFieldNotesList' => '2em'
@@ -49,19 +38,6 @@ return [
                 'addNote' => CrudAddNoteToModelController::class
             ]
         ],
-	    'task' => [
-			'enabled' => false,
-			'class' => Task::class,
-		    'table' => 'notes__tasks',
-		    'parametersFiles' => [
-			    'create' => TaskCreateStoreFieldsetsParameters::class,
-			    'edit' => TaskCreateStoreFieldsetsParameters::class,
-			    'show' => TaskShowFieldsetsParameters::class,
-		    ],
-		    'fieldsGroupsFiles' => [
-			    'index' => TaskFieldsGroupParametersFile::class
-		    ],
-	    ],
         'notetype' => [
             'class' => Notetype::class,
             'table' => 'ibnotes_types',

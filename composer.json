@@ -1,6 +1,6 @@
 {
     "name": "ilbronza/notes",
-    "description": "uikit flash notifications",
+    "description": "Polymorphic Laravel notes with attachments and notifications",
     "license": "MIT",
     "authors": [
         {
@@ -10,11 +10,12 @@
         }
     ],
     "homepage": "https://github.com/ilbronza/notes",
-    "keywords": ["Laravel", "Notes"],
-    "require": {
-    },
-    "require-dev": {
-    },
+    "keywords": [
+        "Laravel",
+        "Notes"
+    ],
+    "require": {},
+    "require-dev": {},
     "autoload": {
         "psr-4": {
             "IlBronza\\Notes\\": "src/"
@@ -35,5 +36,8 @@
                 "Notes": "IlBronza\\Notes\\Facades\\Notes"
             }
         }
+    },
+    "suggest": {
+        "ilbronza/tasks": "Task management extracted from Notes; required by applications using tasks"
     }
 }

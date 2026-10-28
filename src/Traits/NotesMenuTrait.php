@@ -6,53 +6,17 @@ use function route;
 
 trait NotesMenuTrait
 {
+	/** @deprecated Use app('tasks')->tasksMenu(). */
 	public function tasksMenu($menu, $settingsButton)
 	{
-		$tasksButton = $menu->createButton([
-			'name' => 'tasksManager',
-			'icon' => 'message',
-			'text' => 'notes::tasks.manage'
-		]);
-
-		$settingsButton->addChild($tasksButton);
-
-		$tasksButton->addChild(
-			$menu->createButton([
-				'name' => 'tasks.index',
-				'icon' => 'list',
-				// 'href' => static::route('notes.unseen'),
-				'href' => route('notesmanagertasks.index'),
-				'text' => 'notes::tasks.list'
-			])
-		);
-
-		$tasksButton->addChild(
-			$menu->createButton([
-				'name' => 'tasks.closed',
-				'icon' => 'check',
-				// 'href' => static::route('notes.unseen'),
-				'href' => route('notesmanagertasks.closed'),
-				'text' => 'notes::tasks.closed'
-			])
-		);
-
+		if (app()->bound('tasks'))
+			app('tasks')->tasksMenu($menu, $settingsButton);
 	}
 
     public function manageMenuButtons()
     {
         if(! $menu = app('menu'))
             return;
-
-		$taskClass = config('notes.models.task.class');
-		if (config('notes.models.task.enabled', false) && auth()->check() && !$taskClass::isTaskStaff(auth()->user()))
-		{
-			$menu->createButton([
-				'name' => 'tasks.myTasks',
-				'icon' => 'comments',
-				'href' => route(config('notes.routePrefixTasks') . 'index'),
-				'text' => 'notes::tasks.myTasks',
-			]);
-		}
 
         $settingsButton = $menu->provideButton([
                 'text' => 'menu::menu.settings',
@@ -107,8 +71,8 @@ trait NotesMenuTrait
             ])
         );
 
-		if(config('notes.models.task.enabled', false))
-			$this->tasksMenu($menu, $settingsButton);
+		if (app()->bound('tasks'))
+			app('tasks')->manageMenuButtons();
 
     }
 }

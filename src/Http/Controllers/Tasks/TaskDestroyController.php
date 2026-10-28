@@ -2,17 +2,6 @@
 
 namespace IlBronza\Notes\Http\Controllers\Tasks;
 
-use IlBronza\CRUD\Traits\CRUDDeleteTrait;
-
-class TaskDestroyController extends TaskCRUD
-{
-	use CRUDDeleteTrait;
-
-	public $allowedMethods = ['destroy'];
-
-	public function destroy($task)
-	{
-		$task = $this->findModel($task);
-
-		return $this->_destroy($task);
-	}}
+/** @deprecated Install ilbronza/tasks and use \IlBronza\Tasks\Http\Controllers\Tasks\TaskDestroyController. */
+if (class_exists(\IlBronza\Tasks\Http\Controllers\Tasks\TaskDestroyController::class))
+    class_alias(\IlBronza\Tasks\Http\Controllers\Tasks\TaskDestroyController::class, __NAMESPACE__ . '\\TaskDestroyController');
