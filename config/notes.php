@@ -4,6 +4,7 @@ use IlBronza\Notes\Http\Controllers\CrudAddNoteToModelController;
 use IlBronza\Notes\Http\ParametersFiles\Fieldsets\NoteShowFieldsetsParameters;
 use IlBronza\Notes\Http\ParametersFiles\Fieldsets\NotetypeShowFieldsetsParameters;
 use IlBronza\Notes\Http\ParametersFiles\NoteParameters;
+use IlBronza\Notes\Http\ParametersFiles\Datatables\NoteRelatedByOwnerFieldsGroupParametersFile;
 use IlBronza\Notes\Http\ParametersFiles\NotetypeParameters;
 use IlBronza\Notes\Models\Note;
 use IlBronza\Notes\Models\Notetype;
@@ -29,6 +30,9 @@ return [
     'models' => [
         'note' => [
             'class' => Note::class,
+            'fieldsGroupsFiles' => [
+                'relatedByOwner' => NoteRelatedByOwnerFieldsGroupParametersFile::class,
+            ],
             'table' => 'ibnotes',
             'parametersFiles' => [
                 'show' => NoteShowFieldsetsParameters::class,
